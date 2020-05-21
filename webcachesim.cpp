@@ -44,7 +44,7 @@ int main (int argc, char* argv[])
     webcache->setPar(opmatch[1], opmatch[2]);
     paramSummary += opmatch[2];
   }
-  if (cacheType.compare("CH") == 0) {
+  if (cacheType.compare("CH") == 0 || cacheType.compare("SF") == 0) {
     // init mapper
     webcache->init_mapper(path);
   }
@@ -53,24 +53,39 @@ int main (int argc, char* argv[])
   long long reqs = 0, hits = 0;
   long long reqs_size = 0, hits_size = 0;
   long long t, id, size;
+  SimpleRequest* req = new SimpleRequest(0, 0);
 
   cerr << "running..." << endl;
 
   infile.open(path);
-  SimpleRequest* req = new SimpleRequest(0, 0);
-  while (infile >> t >> id >> size) {
-    reqs++;
-    reqs_size += size;
-    
-    req->reinit(id,size);
-    if(webcache->lookup(req)) {
+  
+  if (cacheType.compare("SF")) {
+    while (infile >> t >> id >> size) {
+      reqs++;
+      reqs_size += size;
+      
+      req->reinit(id,size);
+      if(webcache->lookup(req)) {
         hits++;
         hits_size += size;
-    } else {
+      } 
+      else {
         webcache->admit(req);
+      }
+    }
+    
+  }
+  else {
+    while (infile >> t >> id >> size) {
+      reqs++;
+      reqs_size += size;
+      req->reinit(id,size);
+      if (webcache->request(req)) {
+        hits++;
+        hits_size += size;
+      }
     }
   }
-
   delete req;
 
   infile.close();

@@ -9,6 +9,7 @@ LIBS += -lm
 CXX = g++ #clang++ #OSX
 CXXFLAGS += -std=c++11 #-stdlib=libc++ #non-linux
 CXXFLAGS += -MMD -MP # dependency tracking flags
+CXXFLAGS += -g
 CXXFLAGS += -I./
 CXXFLAGS += -Wall -Werror 
 LDFLAGS += $(LIBS)
