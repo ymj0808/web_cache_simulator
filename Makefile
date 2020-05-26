@@ -3,6 +3,8 @@ OBJS += caches/lru_variants.o
 OBJS += caches/gd_variants.o
 OBJS += caches/cluster_variants.o
 OBJS += random_helper.o
+OBJS += consistent_hash/consistent_hash.o
+OBJS += consistent_hash/node.o
 OBJS += webcachesim.o
 LIBS += -lm
 

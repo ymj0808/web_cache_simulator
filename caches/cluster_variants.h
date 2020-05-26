@@ -8,6 +8,7 @@
 #include "cache.h"
 #include "cache_object.h"
 #include "lru_variants.h"
+#include "../consistent_hash/consistent_hash.h"
 #include "../matrix.h"
 #include <chrono>
 
@@ -23,8 +24,9 @@ class CHCache : public Cache
 {
 protected:
     int cache_number;
-    LRUCache *caches_list;                           // LRUCaches cluster
-    std::unordered_map<CacheObject, uint8_t> mapper; // map CacheObjec to LRUCache
+    LRUCache *caches_list; // LRUCaches cluster
+    //std::unordered_map<CacheObject, uint8_t> mapper; // map CacheObjec to LRUCache
+    consistent_hash chash;
 
 public:
     CHCache() : Cache() {}
@@ -37,6 +39,7 @@ public:
     virtual void admit(SimpleRequest *req);
     virtual void evict(SimpleRequest *req){};
     virtual void evict(){};
+    bool request(SimpleRequest *req);
 };
 
 static Factory<CHCache> factoryCH("CH");
@@ -57,16 +60,27 @@ protected:
     double alpha;
     int occur_count;
     std::chrono::steady_clock::time_point time;
-    uint64_t m = 0;                                  // unique content number
-    LRUCache *caches_list;                           // LRUCaches cluster
-    std::unordered_map<CacheObject, uint8_t> mapper; // map CacheObjec to LRUCache
-    std::list<CacheObject> _rank_list;               // LRU stack order for requested content
-    lruCacheMapType _rank_list_map;                  //
-    std::unordered_map<CacheObject, sd_block> sd;    // obj to sd_block
+    uint64_t m = 0;          // unique content number
+    LRUCache *caches_list;   // LRUCaches cluster
+    uint64_t *request_count; // request number of each server in a window
+    uint64_t *hit_count;
+    uint64_t *miss_count;
+    double *miss_rate;
+    double *usage_ratio;
+    double *rank;
+    //std::unordered_map<CacheObject, uint8_t> mapper; // map CacheObjec to LRUCache
+    //std::list<CacheObject> _rank_list;               // LRU stack order for requested content
+    //lruCacheMapType _rank_list_map;                  //
+    //std::unordered_map<CacheObject, sd_block> sd;    // obj to sd_block
 
-    uint32_t **matrix;                            // request matrix, reset
-    std::unordered_map<CacheObject, int> obj2row; // reset
-    std::unordered_map<CacheObject, int> last_access;
+    uint32_t **matrix; // request matrix, reset
+    //std::unordered_map<CacheObject, int> obj2row; // reset
+    //std::unordered_map<CacheObject, int> last_access;
+    std::vector<unsigned int> cache_index_each_node;
+    std::vector<std::pair<int, unsigned int>> min2max; // prior is the min server, last is the max server, move min close to max
+    int virtual_node_number = 0;
+
+    consistent_hash chash;
 
     int position = 0;
 
@@ -79,6 +93,7 @@ public:
     virtual void admit(SimpleRequest *req);
     virtual void evict(SimpleRequest *req){};
     virtual void evict(){};
+    virtual void print_hash_space();
 
     bool request(SimpleRequest *req);
     void reset();

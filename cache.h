@@ -59,6 +59,7 @@ public:
     }
     virtual void setPar(std::string parName, std::string parValue) {}
     virtual void init_mapper(std::string path) {};
+    virtual void print_hash_space() {};
     virtual bool request(SimpleRequest* req) { return false;};
 
     uint64_t getCurrentSize() const {
