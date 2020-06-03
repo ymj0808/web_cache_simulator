@@ -9,7 +9,9 @@
 #include <algorithm>
 #include <iterator>
 #include <vector>
+#include <queue>
 #include "cluster_variants.h"
+#include "gd_variants.h"
 #include "../random_helper.h"
 
 /*
@@ -18,19 +20,13 @@
 
 bool CHCache::lookup(SimpleRequest *req)
 {
-    //CacheObject obj(req);
-    auto cache_index = chash.look_up(std::to_string(req->getId()));
-    //auto cache_iter = mapper.find(obj); // redirect to small cache
-    //return caches_list[cache_iter->second].lookup(req);
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
     return caches_list[cache_index].lookup(req);
 }
 
 void CHCache::admit(SimpleRequest *req)
 {
-    //CacheObject obj(req);
-    //auto cache_iter = mapper.find(obj);
-    //caches_list[cache_iter->second].admit(req);
-    auto cache_index = chash.look_up(std::to_string(req->getId()));
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
     caches_list[cache_index].admit(req);
 }
 
@@ -47,43 +43,28 @@ void CHCache::setPar(std::string parName, std::string parValue)
             caches_list[i].setSize(_cacheSize);
         }
     }
+    else if (parName.compare("vnode") == 0)
+    {
+        const int param = stoull(parValue);
+        virtual_node = param;
+    }
     else
     {
         std::cerr << "unrecognized parameter: " << parName << std::endl;
     }
 }
 
-void CHCache::init_mapper(std::string path)
+void CHCache::init_mapper()
 {
-    /*
-    std::ifstream infile;
-    infile.open(path);
-    long long t, id, size;
-    uint8_t cache_idx;
-    std::hash<long long> hasher;
-    SimpleRequest *req = new SimpleRequest(0, 0);
-
-    while (infile >> t >> id >> size)
-    {
-        req->reinit(id, size);
-        CacheObject obj(req);
-        if (mapper.find(obj) == mapper.end())
-        {
-            cache_idx = uint8_t(hasher(id) % cache_number);
-            mapper.insert(std::pair<CacheObject, uint8_t>(CacheObject(req), cache_idx));
-        }
-    }
-    infile.close();
-    */
-    chash.add_real_node("192.168.0.136", 40);
-    chash.add_real_node("192.168.1.137", 40);
-    chash.add_real_node("192.168.2.138", 40);
-    chash.add_real_node("192.168.3.139", 40);
+    chash.add_real_node("192.168.0.136", virtual_node);
+    chash.add_real_node("192.168.1.137", virtual_node);
+    chash.add_real_node("192.168.2.138", virtual_node);
+    chash.add_real_node("192.168.3.139", virtual_node);
 }
 
 bool CHCache::request(SimpleRequest *req)
 {
-    auto cache_index = chash.look_up(std::to_string(req->getId()));
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
     //auto cache_index = mapper.find(obj)->second; // redirect to small cache
     bool flag = caches_list[cache_index].lookup(req);
     if (!flag)
@@ -94,27 +75,18 @@ bool CHCache::request(SimpleRequest *req)
 }
 
 /*
-    Shuffler
+    Shuffler ***************************************************************************************
 */
 
 bool Shuffler::lookup(SimpleRequest *req)
 {
-
-    //CacheObject obj(req);
-    //auto cache_iter = mapper.find(obj); // redirect to small cache
-    //return caches_list[cache_iter->second].lookup(req);
-    auto cache_index = chash.look_up(std::to_string(req->getId()));
-    //auto cache_iter = mapper.find(obj); // redirect to small cache
-    //return caches_list[cache_iter->second].lookup(req);
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
     return caches_list[cache_index].lookup(req);
 }
 
 void Shuffler::admit(SimpleRequest *req)
 {
-    //CacheObject obj(req);
-    //auto cache_iter = mapper.find(obj);
-    //caches_list[cache_iter->second].admit(req);
-    auto cache_index = chash.look_up(std::to_string(req->getId()));
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
     caches_list[cache_index].admit(req);
 }
 
@@ -148,6 +120,11 @@ void Shuffler::setPar(std::string parName, std::string parValue)
             param /= 10;
         alpha = param;
     }
+    else if (parName.compare("vnode") == 0)
+    {
+        const int param = stoull(parValue);
+        virtual_node = param;
+    }
     else
     {
         std::cerr << "unrecognized parameter: " << parName << std::endl;
@@ -163,41 +140,16 @@ void Shuffler::print_hash_space()
     std::cout << std::endl;
 }
 
-void Shuffler::init_mapper(std::string path)
+void Shuffler::init_mapper()
 {
-    // using mapper
-    /*
-    std::ifstream infile;
-    infile.open(path); 
-    long long t, id, size;
-    uint8_t cache_idx;
-    std::hash<long long> hasher;
-    SimpleRequest *req = new SimpleRequest(0, 0);
-
-    while (infile >> t >> id >> size)
-    {
-        req->reinit(id, size);
-        CacheObject obj(req);
-        if (mapper.find(obj) == mapper.end())
-        {
-            cache_idx = uint8_t(hasher(id) % cache_number);
-            mapper.insert(std::pair<CacheObject, uint8_t>(CacheObject(req), cache_idx));
-            obj2row.insert(std::pair<CacheObject, int>(CacheObject(req), m));
-            last_access.insert(std::pair<CacheObject, int>(CacheObject(req), 0));
-            m++;
-        }
-    }
-    infile.close();
-    */
-
     // using consistent hash
 
-    chash.add_real_node("192.168.0.136", 40);
-    chash.add_real_node("192.168.1.137", 40);
-    chash.add_real_node("192.168.2.138", 40);
-    chash.add_real_node("192.168.3.139", 40);
+    chash.add_real_node("192.168.0.136", virtual_node);
+    chash.add_real_node("192.168.1.137", virtual_node);
+    chash.add_real_node("192.168.2.138", virtual_node);
+    chash.add_real_node("192.168.3.139", virtual_node);
 
-    print_hash_space();
+    //print_hash_space();
 
     matrix = new uint32_t *[window_size]; // only record last window_size
     blocks = int(window_size / 32);
@@ -229,31 +181,17 @@ void Shuffler::init_mapper(std::string path)
     std::cerr << "init done" << std::endl;
     for (auto i : chash.sorted_node_hash_list)
     {
-        cache_index_each_node.push_back(chash.virtual_node_map[i].cache_index);
+        int cache_index = chash.virtual_node_map[i].cache_index;
+        cache_index_each_node.push_back(cache_index);
         virtual_node_number++;
     }
     std::cout << virtual_node_number << std::endl;
-    for (auto i : cache_index_each_node)
-    {
-        std::cout << i << '\t';
-    }
-    std::cout << std::endl;
+    std::cout << cache_index_each_node.size() << std::endl;
 }
 
 void Shuffler::reset()
 {
     position = 0;
-    //auto size = sizeof(matrix);
-    //memset(matrix, 0, size);
-    /*
-    for (int i = 0; i < window_size; ++i)
-    {
-        for (int j = 0; j < blocks; j++)
-        {
-            matrix[i][j] = 0;
-        }
-    }
-    */
     for (int i = 0; i < cache_number; ++i)
     {
         request_count[i] = 0;
@@ -262,15 +200,6 @@ void Shuffler::reset()
         usage_ratio[i] = 0;
         rank[i] = 0.0;
     }
-    min2max.clear();
-    /*
-    _rank_list_map.clear();
-    _rank_list.clear();
-    sd.clear();
-    last_access.clear();
-    occur_count = 0;
-    obj2row.clear();
-    */
 }
 
 bool Shuffler::requested(int row, int prev)
@@ -291,35 +220,87 @@ bool cmp2(const std::pair<int, unsigned int> &x, const std::pair<int, unsigned i
     return x.second > y.second;
 }
 
-bool Shuffler::request(SimpleRequest *req)
+void Shuffler::update()
 {
-    /*
-    CacheObject obj(req);
-    auto rank_list_map_it = _rank_list_map.find(obj);
-    // get stack distance for this request
-    if (rank_list_map_it != _rank_list_map.end())
-    { // not first request for this content
-        int stack_distance = 0;
-        for (auto it = _rank_list.begin(); it != rank_list_map_it->second; ++it)
-            stack_distance++;
-        sd.find(obj)->second.request(stack_distance);
-        _rank_list.splice(_rank_list.begin(), _rank_list, rank_list_map_it->second);
-        matrix[obj2row[obj]][position >> 5] |= (1 << (position & 0b11111));
-        last_access[obj] = position;
+    //uint64_t max = request_count[0], min = request_count[0];
+    uint64_t max_requests = request_count[0];
+    for (int i = 1; i < cache_number; ++i)
+    {
+        if (max_requests < request_count[i])
+        {
+            max_requests = request_count[i];
+        }
+    }
+    for (int i = 0; i < cache_number; ++i)
+    {
+        miss_rate[i] = (double)miss_count[i] / request_count[i];
+        //std::cout<<miss_count[i]<<'\t';
+        //std::cout<<request_count[i]<<'\t';
+        //std::cout<<miss_rate[i]<<'\t';
+        usage_ratio[i] = (double)request_count[i] / max_requests;
+        //std::cout<<usage_ratio[i]<<'\t';
+        rank[i] = miss_rate[i] * alpha + usage_ratio[i] * (1 - alpha);
+        //std::cout<<rank[i]<<'*';
+    }
+    int max_i = 0, min_i = 0;
+    double max_rank = rank[0], min_rank = rank[0];
+
+    for (int i = 1; i < cache_number; ++i)
+    {
+        if (rank[i] > max_rank)
+        {
+            max_rank = rank[i];
+            max_i = i;
+        }
+        if (rank[i] < min_rank)
+        {
+            min_rank = rank[i];
+            min_i = i;
+        }
+    }
+    std::vector<std::pair<int, unsigned int>> min2max; // prior is the min server, last is the max server, move min close to max
+    for (int i = 0; i < virtual_node_number - 1; ++i)
+    {
+        if (cache_index_each_node[i] == min_i)
+        {
+            if (cache_index_each_node[i + 1] == max_i)
+            {
+                min2max.push_back(std::pair<int, unsigned int>(i, chash.sorted_node_hash_list[i + 1] - chash.sorted_node_hash_list[i]));
+            }
+        }
+    }
+
+    //std::cout << "Shift " << min_i << " to " << max_i << std::endl;
+    if (min2max.size() != 0)
+    {
+        sort(min2max.begin(), min2max.end(), cmp2); // find the bigest gap of min node to max node, shift this min node to max node
+        int moving_min_index = min2max[0].first;
+        //std::cout << min_rank << '\t' << max_rank << std::endl;
+        unsigned int mid = min2max[0].second * (1 - min_rank / max_rank) / 10;
+        mid += chash.sorted_node_hash_list[moving_min_index];
+        //unsigned int mid = chash.sorted_node_hash_list[moving_min_index];
+        auto iter = chash.virtual_node_map.find(chash.sorted_node_hash_list[moving_min_index]);
+        if (iter == chash.virtual_node_map.end())
+            std::cout << "fuck" << std::endl;
+        (unsigned int &)iter->first = mid;
+        iter->second.hash_value = mid;
+        chash.sorted_node_hash_list[moving_min_index] = mid;
+        //std::cout << "Shift " << min_i << " to " << max_i << " success!" << std::endl;
     }
     else
-    { // first occur
-        //sd.insert(std::pair<CacheObject, sd_block>(obj, sd_block()));
-        //obj2row.insert(std::pair<CacheObject, int>(obj, occur_count));
-        matrix[occur_count][position >> 5] |= (1 << (position & 0b11111));
-        last_access.insert(std::pair<CacheObject, int>(obj, position));
-        _rank_list.push_front(obj);
-        _rank_list_map[obj] = _rank_list.begin();
-        occur_count++;
+    {
+        std::cout << "Shift " << min_i << " to " << max_i << " fail!" << std::endl;
     }
-    */
+    reset();
+}
 
-    auto cache_index = chash.look_up(std::to_string(req->getId()));
+bool Shuffler::request(SimpleRequest *req)
+{
+    int cache_index = chash.look_up(std::to_string(req->getId())).second;
+    if (cache_index < 0 || cache_index > 3)
+    {
+        std::cout << "fuck" << std::endl;
+    }
     //auto cache_index = mapper.find(obj)->second; // redirect to small cache
     request_count[cache_index]++;
     bool flag = caches_list[cache_index].lookup(req);
@@ -333,105 +314,379 @@ bool Shuffler::request(SimpleRequest *req)
         hit_count[cache_index]++;
     }
     position++;
+
     if (position == window_size)
+        update();
+    return flag;
+}
+
+/*
+    Shuffler Matrix ***************************************************************************************
+*/
+
+bool ShufflerM::lookup(SimpleRequest *req)
+{
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    return caches_list[cache_index].lookup(req);
+}
+
+void ShufflerM::admit(SimpleRequest *req)
+{
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    caches_list[cache_index].admit(req);
+}
+
+void ShufflerM::setPar(std::string parName, std::string parValue)
+{
+    if (parName.compare("n") == 0)
+    { // set the number of servers
+        const int n = stoull(parValue);
+        cache_number = n;
+        //caches_list = new LRUCache[cache_number];
+        caches_list = new FilterCache[cache_number];
+        assert(n > 1);
+        for (int i = 0; i < n; ++i)
+        {
+            caches_list[i].setSize(_cacheSize);
+            caches_list[i].setPar("n", "2");
+        }
+    }
+    else if (parName.compare("W") == 0)
+    { // set the window size
+        const int w = stoull(parValue);
+        window_size = w;
+    }
+    else if (parName.compare("alpha") == 0)
     {
+        double param = stoull(parValue);
+        while (param > 1.0)
+            param /= 10;
+        alpha = param;
+    }
+    else if (parName.compare("vnode") == 0)
+    {
+        const int param = stoull(parValue);
+        virtual_node = param;
+    }
+    else if (parName.compare("t") == 0)
+    {
+        const int param = stoull(parValue);
+        threshold = param;
+    }
+    else
+    {
+        std::cerr << "unrecognized parameter: " << parName << std::endl;
+    }
+}
 
-        unsigned int max_i = 0, min_i = 0;
-        //uint64_t max = request_count[0], min = request_count[0];
-        unsigned int max_requests = request_count[0];
-        for (int i = 1; i < cache_number; ++i)
-        {
-            if (max_requests < request_count[i])
-            {
-                max_requests = request_count[i];
-            }
-        }
-        for (int i = 0; i < cache_number; ++i)
-        {
-            miss_rate[i] = miss_count[i] / request_count[i];
-            usage_ratio[i] = request_count[i] / max_requests;
-            rank[i] = miss_rate[i] + usage_ratio[i];
-        }
-        double max_rank = rank[0], min_rank = rank[0];
-        for (int i = 1; i < cache_number; ++i)
-        {
-            if (rank[i] > max_rank)
-            {
-                max_rank = rank[i];
-                max_i = i;
-            }
-            if (rank[i] < min_rank)
-            {
-                min_rank = rank[i];
-                min_i = i;
-            }
-        }
+void ShufflerM::print_hash_space()
+{
+    for (auto i : chash.sorted_node_hash_list)
+    {
+        std::cout << i << ',';
+    }
+    std::cout << std::endl;
+}
 
-        for (int i = 0; i < 159; ++i)
-        { /*
-            if (cache_index_each_node[i] == min_i)
+void ShufflerM::init_mapper()
+{
+    chash.add_real_node("192.168.0.136", virtual_node);
+    chash.add_real_node("192.168.1.137", virtual_node);
+    chash.add_real_node("192.168.2.138", virtual_node);
+    chash.add_real_node("192.168.3.139", virtual_node);
+
+    request_count = new uint64_t[cache_number];
+    hit_count = new uint64_t[cache_number];
+    miss_count = new uint64_t[cache_number];
+    miss_rate = new double[cache_number];
+    usage_ratio = new double[cache_number];
+    rank = new double[cache_number];
+    vnode_index_for_each_real_node = new std::list<uint32_t>[cache_number];
+
+
+    for (int i = 0; i < cache_number; ++i)
+    {
+        request_count[i] = 0;
+        hit_count[i] = 0;
+        miss_count[i] = 0;
+        miss_rate[i] = 0.0;
+        usage_ratio[i] = 0.0;
+    }
+
+    time = std::chrono::steady_clock::now();
+    std::cerr << "init done" << std::endl;
+    virtual_node_number = chash.sorted_node_hash_list.size();
+
+    frag_arrs = new std::set<uint32_t>[virtual_node_number];
+
+    head = new dequeue_node(nullptr);
+    pointer = head;
+    for (uint32_t j = 2; j <= window_size; ++j)
+    {
+        pointer->next = new dequeue_node(pointer);
+        pointer = pointer->next;
+    }
+    tail = pointer;
+    pointer = head;
+
+    for (int vnode = 0; vnode < virtual_node_number; ++vnode)
+    {
+        int cache_index = chash.virtual_node_map[chash.sorted_node_hash_list[vnode]].cache_index;
+        cache_index_each_node.push_back(cache_index);
+        vnode_index_for_each_real_node[cache_index].push_back(vnode);
+        std::unordered_map<uint64_t, uint32_t> last_access;
+        last_access_on_each_virtual_node.push_back(last_access);
+
+        std::set<uint32_t> arr;
+        arr.insert(0);
+        frag_arrs[vnode] = arr;
+    }
+
+    std::cout << virtual_node_number << std::endl;
+    std::cout << cache_index_each_node.size() << std::endl;
+}
+
+void ShufflerM::reset()
+{
+    position = 0;
+    pointer = head;
+
+    for (int i = 0; i < cache_number; ++i)
+    {
+        request_count[i] /= 2; // moving average
+        hit_count[i] = 0;
+        miss_count[i] = 0;
+        usage_ratio[i] = 0;
+        rank[i] = 0.0;
+    }
+
+    for (int vnode = 0; vnode < virtual_node_number; ++vnode)
+    {
+        for (uint32_t j = 0; j < window_size; j++)
+        {
+            //arrays[vnode][j] = 0;
+            frag_arrs[vnode].clear();
+            frag_arrs[vnode].insert(0);
+        }
+        last_access_on_each_virtual_node[vnode].clear();
+    }
+
+    while (pointer != nullptr)
+    {
+        //delete[] pointer->arr;
+        pointer->arr.clear();
+        pointer = pointer->next;
+    }
+    pointer = head;
+}
+
+void ShufflerM::update()
+{
+    max_requests = request_count[0];
+    for (int i = 1; i < cache_number; ++i)
+    {
+        if (max_requests < request_count[i])
+        {
+            max_requests = request_count[i];
+        }
+    }
+    for (int i = 0; i < cache_number; ++i)
+    {
+        miss_rate[i] = (double)miss_count[i] / (miss_count[i] + hit_count[i]);
+        //std::cout << miss_count[i] << '\t';
+        //std::cout << request_count[i] << '\t';
+        //std::cout << miss_rate[i] << '\t';
+        usage_ratio[i] = (double)request_count[i] / max_requests;
+        //std::cout<<usage_ratio[i]<<'\t';
+        rank[i] = miss_rate[i] * alpha + usage_ratio[i] * (1 - alpha);
+        //std::cout << rank[i] << '*';
+    }
+    max_i = 0;
+    min_i = 0;
+    max_rank = rank[0];
+    min_rank = rank[0];
+
+    for (int i = 1; i < cache_number; ++i)
+    {
+        if (rank[i] > max_rank)
+        {
+            max_rank = rank[i];
+            max_i = i;
+        }
+        if (rank[i] < min_rank)
+        {
+            min_rank = rank[i];
+            min_i = i;
+        }
+    }
+
+    SD_Max = 0;
+    target = vnode_index_for_each_real_node[max_i].end();
+
+    while (pointer != nullptr)
+    {
+        if (pointer->real_node == max_i || pointer->real_node == min_i)
+        {
+            pointer->c = pointer->c_value(pointer->last_access);
+            if (pointer->c < threshold)
+                SD_Max++;
+        }
+        pointer = pointer->prev;
+    }
+    pointer = tail;
+
+    for (auto iter = vnode_index_for_each_real_node[max_i].begin(); iter != vnode_index_for_each_real_node[max_i].end(); iter++)
+    {
+        int SD = 0;
+        position--;
+        while (pointer != nullptr)
+        {
+            if (pointer->real_node == min_i)
             {
-                if (cache_index_each_node[i + 1] == max_i)
+                if (pointer->last_access != UINT32_MAX)
+                    queue_of_min.push(pointer);
+                while (!queue_of_c_i.empty())
                 {
-                    //min2max.push_back(std::pair<int, unsigned int>(i, chash.sorted_node_hash_list[i + 1] - chash.sorted_node_hash_list[i]));
-                    std::cout<< "d";
+                    dequeue_node *col = queue_of_c_i.front();
+                    if (position >= col->last_access && col->c + pointer->c_value(col->last_access) < threshold)
+                    {
+                        SD++;
+                    }
+                    else
+                    {
+                        if (col->c < threshold)
+                        {
+                            SD++;
+                        }   
+                    }
+                    queue_of_c_i.pop();
                 }
             }
-            */
-            std::cout << min_i << max_i;
+            else if (pointer->virtual_node == *iter)
+            {
+                if (pointer->last_access != UINT32_MAX)
+                    queue_of_c_i.push(pointer);
+                while (!queue_of_max.empty())
+                {
+                    dequeue_node *col = queue_of_max.front();
+                    if (position >= col->last_access && col->c - pointer->c_value(col->last_access) < threshold)
+                    {
+                        SD++;
+                    }
+                    else
+                    {
+                        if (col->c < threshold)
+                        {
+                            SD++;
+                        }
+                    }
+                    queue_of_max.pop();
+                }
+                while (!queue_of_min.empty())
+                {
+                    dequeue_node *col = queue_of_min.front();
+                    if (position >= col->last_access && col->c + pointer->c_value(col->last_access) < threshold)
+                    {
+                        SD++;
+                    }
+                    else
+                    {
+                        if (col->c < threshold)
+                        {
+                            SD++;
+                        }
+                    }
+                    queue_of_min.pop();
+                }
+            }
+            else if (pointer->real_node == max_i && pointer->last_access != UINT32_MAX)
+            {
+                queue_of_max.push(pointer);
+            }
+            pointer = pointer->prev;
+            position--;
         }
-
-        //std::cout << "Shift " << min_i << " to " << max_i << std::endl;
-        /*
-        if (min2max.size() != 0)
+        while (!queue_of_c_i.empty()) {
+            if (queue_of_c_i.front()->c < threshold)
+                SD++;
+            queue_of_c_i.pop();
+        }
+        while (!queue_of_max.empty()) {
+            if (queue_of_max.front()->c < threshold)
+                SD++;
+            queue_of_max.pop();
+        }
+        while (!queue_of_min.empty()) {
+            if (queue_of_min.front()->c < threshold)
+                SD++;
+            queue_of_min.pop();
+        }
+        if (SD > SD_Max)
         {
-            sort(min2max.begin(), min2max.end(), cmp2); // find the bigest gap of min node to max node, shift this min node to max node
-            int moving_min_index = min2max[0].first;
-            //unsigned int mid = min2max[0].second * (1 - min / max) / 10;
-            //mid += chash.sorted_node_hash_list[moving_min_index];
-            //unsigned int mid = chash.sorted_node_hash_list[moving_min_index];
-            auto iter = chash.virtual_node_map.find(chash.sorted_node_hash_list[moving_min_index]);
-            if (iter == chash.virtual_node_map.end())
-                std::cout << "fuck" << std::endl;
-            //(unsigned int &)iter->first = mid;
-            //iter->second.hash_value = mid;
-            //chash.sorted_node_hash_list[moving_min_index] = mid;
-            //std::cout << "Shift " << min_i << " to " << max_i << " success!" << std::endl;
+            SD_Max = SD;
+            target = iter;
         }
-        else
-        {
-            std::cout << "Shift " << min_i << " to " << max_i << " fail!" << std::endl;
-        }
-        
-
-
-        reset();
-        //const long timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - time).count();
-        //std::cerr << "*********** update *********** time elapsed: " << timeElapsed << std::endl;
-        //time = std::chrono::steady_clock::now();
-        */
-        reset();
+        pointer = tail;
+        position = window_size;
     }
+    // change the cache_index attribute of virtual node
+    if (target != vnode_index_for_each_real_node[max_i].end()) {
+        chash.virtual_node_map[chash.sorted_node_hash_list[*target]].cache_index = min_i;
+        // change the vnode_index_for_each_real_node, put the virtual node from max_i list to min_i list
+        vnode_index_for_each_real_node[min_i].push_back(*target);
+        vnode_index_for_each_real_node[max_i].erase(target);
+    }
+    reset();
+}
 
-    /*
-    position++;
-    if (position % window_size == 0)
+bool ShufflerM::request(SimpleRequest *req)
+{
+    look_up_res = chash.look_up(std::to_string(req->getId())); // <virtual node index, real node index>
+    request_count[look_up_res.second]++;
+
+    iter_in_last_access = last_access_on_each_virtual_node[look_up_res.first].find(req->getId()); // <ID, last access>
+    if (iter_in_last_access != last_access_on_each_virtual_node[look_up_res.first].end())
     {
-        std::vector<std::pair<CacheObject, double>> vtMap;
-        for (auto it = sd.begin(); it != sd.end(); it++)
-            vtMap.push_back(std::pair<CacheObject, double>(it->first,
-                                                           it->second.sum_sd * alpha + it->second.times * (1 - alpha)));
-        std::sort(vtMap.begin(), vtMap.end(), cmp);
-        for (int i = 0; i < k; i++)
-        {
-            mapper[vtMap[i].first] = uint8_t(i % cache_number);
-        }
-        reset();
-        const long timeElapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - time).count();
-        std::cerr << "*********** update *********** time elapsed: " << timeElapsed << std::endl;
-        time = std::chrono::steady_clock::now();
+        // accessed before;
+        frag_arrs[look_up_res.first].erase(iter_in_last_access->second + 1);
+        frag_arrs[look_up_res.first].insert(position + 1); // the position for 0
+        iter_in_last_access->second = position;
+        pointer->last_access = position;
     }
-    */
+    else
+    {
+        frag_arrs[look_up_res.first].insert(position + 1);
+        last_access_on_each_virtual_node[look_up_res.first].insert(std::pair<unsigned int, int>(req->getId(), position));
+        pointer->last_access = UINT32_MAX;
+    }
+    pointer->virtual_node = look_up_res.first;
+    pointer->real_node = look_up_res.second;
+    pointer->size = frag_arrs[look_up_res.first].size();
+    //pointer->arr = new uint32_t[pointer->size];
+    //int i = 0;
+    for (auto it = frag_arrs[look_up_res.first].begin(); it != frag_arrs[look_up_res.first].end(); it++) {
+        //pointer->arr[i] = (*it);
+        //i++;
+        pointer->arr.push_back(*it);
+    }  
+    pointer = pointer->next;
 
+    position++;
+
+    flag = caches_list[look_up_res.second].lookup(req);
+    if (!flag)
+    {
+        caches_list[look_up_res.second].admit(req);
+        miss_count[look_up_res.second]++;
+    }
+    else
+    {
+        hit_count[look_up_res.second]++;
+    }
+
+    if (position == window_size)
+    {
+        update();
+    }
     return flag;
 }

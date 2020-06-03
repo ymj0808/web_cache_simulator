@@ -1,0 +1,123 @@
+time duration : 71229ms
+cacheType : SFM	cache_size : 100	paramSummary : 41510000401000
+reqs : 15058484	hits : 12755309	hit rate : 0.847051
+reqs size : 15058484	hit size : 12755309	hit size rate : 0.847051
+time duration : 67136ms
+cacheType : SFM	cache_size : 100	paramSummary : 41510000401000
+reqs : 15058484	hits : 12748302	hit rate : 0.846586
+reqs size : 15058484	hit size : 12748302	hit size rate : 0.846586
+time duration : 639728ms
+cacheType : SFM	cache_size : 10000	paramSummary : 415100004010000
+reqs : 100000000	hits : 44925480	hit rate : 0.449255
+reqs size : 100000000	hit size : 44925480	hit size rate : 0.449255
+time duration : 7795ms
+cacheType : CH	cache_size : 10000	paramSummary : 440
+reqs : 15058484	hits : 15015863	hit rate : 0.99717
+reqs size : 15058484	hit size : 15015863	hit size rate : 0.99717
+time duration : 74826ms
+cacheType : CH	cache_size : 10000	paramSummary : 440
+reqs : 100000000	hits : 45222459	hit rate : 0.452225
+reqs size : 100000000	hit size : 45222459	hit size rate : 0.452225
+time duration : 67732ms
+cacheType : CH	cache_size : 5000	paramSummary : 440
+reqs : 100000000	hits : 41346476	hit rate : 0.413465
+reqs size : 100000000	hit size : 41346476	hit size rate : 0.413465
+time duration : 631565ms
+cacheType : SFM	cache_size : 5000	paramSummary : 415100004010000
+reqs : 100000000	hits : 41235828	hit rate : 0.412358
+reqs size : 100000000	hit size : 41235828	hit size rate : 0.412358
+time duration : 634463ms
+cacheType : SFM	cache_size : 5000	paramSummary : 41510000405000
+reqs : 100000000	hits : 41244298	hit rate : 0.412443
+reqs size : 100000000	hit size : 41244298	hit size rate : 0.412443
+
+
+time duration : 599524ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 4510000405000
+reqs : 100000000	hits : 41250730	hit rate : 0.412507
+reqs size : 100000000	hit size : 41250730	hit size rate : 0.412507
+
+time duration : 62434ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 5000	paramSummary : 440
+reqs : 100000000	hits : 41351854	hit rate : 0.413519
+reqs size : 100000000	hit size : 41351854	hit size rate : 0.413519
+
+time duration : 548968ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 2000	paramSummary : 45100004010000
+reqs : 100000000	hits : 35663902	hit rate : 0.356639
+reqs size : 100000000	hit size : 35663902	hit size rate : 0.356639
+
+time duration : 60911ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 2000	paramSummary : 440
+reqs : 100000000	hits : 35651102	hit rate : 0.356511
+reqs size : 100000000	hit size : 35651102	hit size rate : 0.356511
+
+time duration : 697321ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 10000	paramSummary : 45200004010000
+reqs : 100000000	hits : 45074012	hit rate : 0.45074
+reqs size : 100000000	hit size : 45074012	hit size rate : 0.45074
+
+time duration : 63847ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 10000	paramSummary : 440
+reqs : 100000000	hits : 45216862	hit rate : 0.452169
+reqs size : 100000000	hit size : 45216862	hit size rate : 0.452169
+
+time duration : 744374ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 15000	paramSummary : 45250004015000
+reqs : 100000000	hits : 48476975	hit rate : 0.48477
+reqs size : 100000000	hit size : 48476975	hit size rate : 0.48477
+
+time duration : 65852ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 15000	paramSummary : 440
+reqs : 100000000	hits : 48663559	hit rate : 0.486636
+reqs size : 100000000	hit size : 48663559	hit size rate : 0.486636
+
+time duration : 737191ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 10000	paramSummary : 4520000405000
+reqs : 100000000	hits : 45065321	hit rate : 0.450653
+reqs size : 100000000	hit size : 45065321	hit size rate : 0.450653
+
+time duration : 63821ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 10000	paramSummary : 440
+reqs : 100000000	hits : 45205223	hit rate : 0.452052
+reqs size : 100000000	hit size : 45205223	hit size rate : 0.452052
+
+time duration : 64279ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRUK	cache_size : 5000	paramSummary : 2
+reqs : 100000000	hits : 38866734	hit rate : 0.388667
+reqs size : 100000000	hit size : 38866734	hit size rate : 0.388667
+
+time duration : 762942ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 41520000405000
+reqs : 100000000	hits : 34812452	hit rate : 0.348125
+reqs size : 100000000	hit size : 34812452	hit size rate : 0.348125
+
+time duration : 754157ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 41520000405000
+reqs : 100000000	hits : 43107604	hit rate : 0.431076
+reqs size : 100000000	hit size : 43107604	hit size rate : 0.431076
+
+time duration : 64982ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 5000	paramSummary : 440
+reqs : 100000000	hits : 41289377	hit rate : 0.412894
+reqs size : 100000000	hit size : 41289377	hit size rate : 0.412894
+
+time duration : 752474ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 41520000405000
+reqs : 100000000	hits : 43110838	hit rate : 0.431108
+reqs size : 100000000	hit size : 43110838	hit size rate : 0.431108

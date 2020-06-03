@@ -1,6 +1,6 @@
 #include "node.h"
 
-virtual_node::virtual_node(std::string ip, unsigned int hash_value, unsigned int cache_index)
+virtual_node::virtual_node(std::string ip, unsigned int hash_value, int cache_index)
 {
     this->ip = ip;
     this->hash_value = hash_value;

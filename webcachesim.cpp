@@ -8,6 +8,7 @@
 #include <chrono>
 
 using namespace std;
+ofstream outTp;
 
 int main(int argc, char *argv[])
 {
@@ -48,11 +49,6 @@ int main(int argc, char *argv[])
         webcache->setPar(opmatch[1], opmatch[2]);
         paramSummary += opmatch[2];
     }
-    if (cacheType.compare("CH") == 0 || cacheType.compare("SF") == 0)
-    {
-        // init mapper
-        webcache->init_mapper(path);
-    }
 
     ifstream infile;
     long long reqs = 0, hits = 0;
@@ -64,10 +60,12 @@ int main(int argc, char *argv[])
 
     infile.open(path);
 
-    if (cacheType.compare("SF") && cacheType.compare("CH"))
+    if (cacheType.compare("SF") && cacheType.compare("CH") && cacheType.compare("SFM"))
     {
+        cout << cacheType << endl;
         while (infile >> t >> id >> size)
         {
+            size = 1;
             reqs++;
             reqs_size += size;
 
@@ -85,9 +83,11 @@ int main(int argc, char *argv[])
     }
     else // cluster variants
     {
-        cout << "Cluster" << endl;
+        cout << cacheType << endl;
+        webcache->init_mapper();
         while (infile >> t >> id >> size)
         {
+            size = 1;
             reqs++;
             reqs_size += size;
             req->reinit(id, size);
@@ -97,17 +97,27 @@ int main(int argc, char *argv[])
                 hits_size += size;
             }
         }
-        webcache->print_hash_space();
+        //webcache->print_hash_space();
     }
     delete req;
 
     infile.close();
+    outTp.open("results.txt", ofstream::app);
     const long timeElapsed = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - wall_clock).count();
     cout << "time duration : " << timeElapsed << "ms" << endl;
+    cout << "trace : " << path << endl;
     cout << "cacheType : " << cacheType << "\tcache_size : " << cache_size << "\tparamSummary : " << paramSummary << endl;
     cout << "reqs : " << reqs << "\thits : " << hits << "\thit rate : " << double(hits) / reqs << endl;
     cout << "reqs size : " << reqs_size << "\thit size : " << hits_size << "\thit size rate : " << double(hits_size) / reqs_size << endl;
 
+    outTp << endl;
+    outTp << "time duration : " << timeElapsed << "ms" << endl;
+    outTp << "trace : " << path << endl;
+    outTp << "cacheType : " << cacheType << "\tcache_size : " << cache_size << "\tparamSummary : " << paramSummary << endl;
+    outTp << "reqs : " << reqs << "\thits : " << hits << "\thit rate : " << double(hits) / reqs << endl;
+    outTp << "reqs size : " << reqs_size << "\thit size : " << hits_size << "\thit size rate : " << double(hits_size) / reqs_size << endl;
+
+    outTp.close();
     return 0;
 }
 
@@ -116,4 +126,6 @@ int main(int argc, char *argv[])
                 eg: ./webcachesim test.tr CH 1000 n=4
 
   shuffler : ./webcachesim /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr SF 1073741824 n=4 alpha=15 K=20 W=10000
+
+  Shuffler Matrix: ./webcachesim /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr SFM 1073741824 n=4 alpha=15 W=12800 vnode=40 t=1000
 */

@@ -10,11 +10,11 @@ public:
     std::string ip; // the ip address of this virtual node, format: real_node_ip:port
     unsigned int hash_value;
     //map<unsigned int, string> data;
-    unsigned int cache_index;         // count how many request on this node
+    int cache_index;         // the index of its real node
 
     virtual_node();
 
-    virtual_node(std::string ip, unsigned int hash_value, unsigned int cache_index);
+    virtual_node(std::string ip, unsigned int hash_value, int cache_index);
 
     ~virtual_node();
 };

@@ -82,7 +82,7 @@ unsigned int consistent_hash::find_nearest_node(unsigned int hash_value)
     return low;
 }
 
-unsigned int consistent_hash::look_up(const std::string &content)
+std::pair<unsigned int, unsigned int> consistent_hash::look_up(const std::string &content)
 {
     // return the ip of virtual node that serve this content
     auto hash_position = MurMurHash(content.c_str(), HASH_LEN);
@@ -92,8 +92,10 @@ unsigned int consistent_hash::look_up(const std::string &content)
     { // cross the zero
         virtual_node_index = 0;
     }
-    return virtual_node_map.find(sorted_node_hash_list[virtual_node_index])->second.cache_index;
+    return std::pair<unsigned int, unsigned int>(virtual_node_index, virtual_node_map.find(sorted_node_hash_list[virtual_node_index])->second.cache_index);
 }
+
+
 
 void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_num)
 {
