@@ -348,7 +348,7 @@ void ShufflerM::setPar(std::string parName, std::string parValue)
         for (int i = 0; i < n; ++i)
         {
             caches_list[i].setSize(_cacheSize);
-            caches_list[i].setPar("n", "2");
+            caches_list[i].setPar("n", "1");
         }
     }
     else if (parName.compare("W") == 0)
@@ -381,9 +381,9 @@ void ShufflerM::setPar(std::string parName, std::string parValue)
 
 void ShufflerM::print_hash_space()
 {
-    for (auto i : chash.sorted_node_hash_list)
+    for (int i = 0; i < 4; i++)
     {
-        std::cout << i << ',';
+        std::cout << vnode_index_for_each_real_node[i].size() << ',';
     }
     std::cout << std::endl;
 }

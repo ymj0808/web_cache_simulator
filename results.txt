@@ -121,3 +121,252 @@ trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_
 cacheType : SFM	cache_size : 5000	paramSummary : 41520000405000
 reqs : 100000000	hits : 43110838	hit rate : 0.431108
 reqs size : 100000000	hit size : 43110838	hit size rate : 0.431108
+
+time duration : 698204ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 41520000405000
+reqs : 100000000	hits : 41327880	hit rate : 0.413279
+reqs size : 100000000	hit size : 41327880	hit size rate : 0.413279
+
+time duration : 62104ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 5000	paramSummary : 440
+reqs : 100000000	hits : 41348736	hit rate : 0.413487
+reqs size : 100000000	hit size : 41348736	hit size rate : 0.413487
+
+time duration : 2278237ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 41540000405000
+reqs : 100000000	hits : 41358327	hit rate : 0.413583
+reqs size : 100000000	hit size : 41358327	hit size rate : 0.413583
+
+time duration : 14209ms
+trace : /mnt/c/Users/28347/Documents/lanxun.tr
+cacheType : Filter	cache_size : 5000	paramSummary : 2
+reqs : 15058484	hits : 14706577	hit rate : 0.976631
+reqs size : 15058484	hit size : 14706577	hit size rate : 0.976631
+
+time duration : 13124ms
+trace : /mnt/c/Users/28347/Documents/lanxun.tr
+cacheType : LRU	cache_size : 5000	paramSummary : 
+reqs : 15058484	hits : 14745421	hit rate : 0.97921
+reqs size : 15058484	hit size : 14745421	hit size rate : 0.97921
+
+time duration : 14416ms
+trace : /mnt/c/Users/28347/Documents/lanxun.tr
+cacheType : Filter	cache_size : 5000	paramSummary : 1
+reqs : 15058484	hits : 14720906	hit rate : 0.977582
+reqs size : 15058484	hit size : 14720906	hit size rate : 0.977582
+
+time duration : 43806ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRU	cache_size : 8000	paramSummary : 
+reqs : 100000000	hits : 35730833	hit rate : 0.357308
+reqs size : 100000000	hit size : 35730833	hit size rate : 0.357308
+
+time duration : 45491ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRU	cache_size : 20000	paramSummary : 
+reqs : 100000000	hits : 41397617	hit rate : 0.413976
+reqs size : 100000000	hit size : 41397617	hit size rate : 0.413976
+
+time duration : 49193ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRU	cache_size : 40000	paramSummary : 
+reqs : 100000000	hits : 45221269	hit rate : 0.452213
+reqs size : 100000000	hit size : 45221269	hit size rate : 0.452213
+
+time duration : 68624ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRU	cache_size : 60000	paramSummary : 
+reqs : 100000000	hits : 48689768	hit rate : 0.486898
+reqs size : 100000000	hit size : 48689768	hit size rate : 0.486898
+
+time duration : 148733ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRU	cache_size : 80000	paramSummary : 
+reqs : 100000000	hits : 51724826	hit rate : 0.517248
+reqs size : 100000000	hit size : 51724826	hit size rate : 0.517248
+
+time duration : 133675ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : LRU	cache_size : 100000	paramSummary : 
+reqs : 100000000	hits : 54143791	hit rate : 0.541438
+reqs size : 100000000	hit size : 54143791	hit size rate : 0.541438
+
+time duration : 12258ms
+trace : /mnt/c/Users/28347/Documents/lanxun.tr
+cacheType : LRU	cache_size : 5000	paramSummary : 
+reqs : 15058484	hits : 14745421	hit rate : 0.97921
+reqs size : 15058484	hit size : 14745421	hit size rate : 0.97921
+
+time duration : 13403ms
+trace : /mnt/c/Users/28347/Documents/lanxun.tr
+cacheType : LRU	cache_size : 100	paramSummary : 
+reqs : 15058484	hits : 10993362	hit rate : 0.730044
+reqs size : 15058484	hit size : 10993362	hit size rate : 0.730044
+
+time duration : 4ms
+trace : /mnt/c/Users/28347/Desktop/sim_output.data
+cacheType : LRU	cache_size : 1000	paramSummary : 
+reqs : 0	hits : 0	hit rate : -nan
+reqs size : 0	hit size : 0	hit size rate : -nan
+
+time duration : 3ms
+trace : /mnt/c/Users/28347/Desktop/sim_output.data
+cacheType : LRU	cache_size : 1000	paramSummary : 
+reqs : 0	hits : 0	hit rate : -nan
+reqs size : 0	hit size : 0	hit size rate : -nan
+
+time duration : 3744ms
+trace : /mnt/c/Users/28347/Desktop/sim.data
+cacheType : LRU	cache_size : 1000	paramSummary : 
+reqs : 4004411	hits : 3162899	hit rate : 0.789854
+reqs size : 4004411	hit size : 3162899	hit size rate : 0.789854
+
+time duration : 3648ms
+trace : /mnt/c/Users/28347/Desktop/sim.data
+cacheType : LRU	cache_size : 500	paramSummary : 
+reqs : 4004411	hits : 3128779	hit rate : 0.781333
+reqs size : 4004411	hit size : 3128779	hit size rate : 0.781333
+
+time duration : 3593ms
+trace : /mnt/c/Users/28347/Desktop/sim.data
+cacheType : LRU	cache_size : 100	paramSummary : 
+reqs : 4004411	hits : 2945689	hit rate : 0.735611
+reqs size : 4004411	hit size : 2945689	hit size rate : 0.735611
+
+time duration : 4295ms
+trace : /mnt/c/Users/28347/Desktop/sim.data
+cacheType : LRU	cache_size : 10	paramSummary : 
+reqs : 4004411	hits : 861614	hit rate : 0.215166
+reqs size : 4004411	hit size : 861614	hit size rate : 0.215166
+
+time duration : 111435ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : LRU	cache_size : 1000	paramSummary : 
+reqs : 100000000	hits : 12469515	hit rate : 0.124695
+reqs size : 100000000	hit size : 12469515	hit size rate : 0.124695
+
+time duration : 144531ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/wiki_100million_1/sim_100million_1.tr
+cacheType : CH	cache_size : 5000	paramSummary : 440
+reqs : 100000000	hits : 41336971	hit rate : 0.41337
+reqs size : 100000000	hit size : 41336971	hit size rate : 0.41337
+
+
+
+
+time duration : 1251309ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 2000	paramSummary : 458000402000
+reqs : 100000000	hits : 29577559	hit rate : 0.295776
+reqs size : 100000000	hit size : 29577559	hit size rate : 0.295776
+
+time duration : 166404ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : CH	cache_size : 2000	paramSummary : 440
+reqs : 100000000	hits : 29607271	hit rate : 0.296073
+reqs size : 100000000	hit size : 29607271	hit size rate : 0.296073
+
+
+
+
+
+
+
+time duration : 1329010ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 2000	paramSummary : 458000402000
+reqs : 100000000	hits : 31504639	hit rate : 0.315046
+reqs size : 100000000	hit size : 31504639	hit size rate : 0.315046
+
+time duration : 166733ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : CH	cache_size : 2000	paramSummary : 440
+reqs : 100000000	hits : 29502968	hit rate : 0.29503
+reqs size : 100000000	hit size : 29502968	hit size rate : 0.29503
+
+time duration : 1204169ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 5000	paramSummary : 4520000405000
+reqs : 100000000	hits : 38653216	hit rate : 0.386532
+reqs size : 100000000	hit size : 38653216	hit size rate : 0.386532
+
+time duration : 73250ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : CH	cache_size : 5000	paramSummary : 440
+reqs : 100000000	hits : 36904029	hit rate : 0.36904
+reqs size : 100000000	hit size : 36904029	hit size rate : 0.36904
+
+time duration : 1576089ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 10000	paramSummary : 45400004010000
+reqs : 100000000	hits : 43838692	hit rate : 0.438387
+reqs size : 100000000	hit size : 43838692	hit size rate : 0.438387
+
+time duration : 184494ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : CH	cache_size : 10000	paramSummary : 440
+reqs : 100000000	hits : 41963313	hit rate : 0.419633
+reqs size : 100000000	hit size : 41963313	hit size rate : 0.419633
+
+time duration : 1719102ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 15000	paramSummary : 45600004015000
+reqs : 100000000	hits : 47024264	hit rate : 0.470243
+reqs size : 100000000	hit size : 47024264	hit size rate : 0.470243
+
+time duration : 83611ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : CH	cache_size : 15000	paramSummary : 440
+reqs : 100000000	hits : 45056736	hit rate : 0.450567
+reqs size : 100000000	hit size : 45056736	hit size rate : 0.450567
+
+time duration : 3377971ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 20000	paramSummary : 45800004020000
+reqs : 100000000	hits : 49444892	hit rate : 0.494449
+reqs size : 100000000	hit size : 49444892	hit size rate : 0.494449
+
+time duration : 208882ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : CH	cache_size : 20000	paramSummary : 440
+reqs : 100000000	hits : 47351290	hit rate : 0.473513
+reqs size : 100000000	hit size : 47351290	hit size rate : 0.473513
+
+time duration : 115503ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : LRU	cache_size : 8000	paramSummary : 
+reqs : 100000000	hits : 29647070	hit rate : 0.296471
+reqs size : 100000000	hit size : 29647070	hit size rate : 0.296471
+
+time duration : 129111ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : LRU	cache_size : 20000	paramSummary : 
+reqs : 100000000	hits : 36910659	hit rate : 0.369107
+reqs size : 100000000	hit size : 36910659	hit size rate : 0.369107
+
+time duration : 133461ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : LRU	cache_size : 40000	paramSummary : 
+reqs : 100000000	hits : 41991224	hit rate : 0.419912
+reqs size : 100000000	hit size : 41991224	hit size rate : 0.419912
+
+time duration : 96897ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : LRU	cache_size : 60000	paramSummary : 
+reqs : 100000000	hits : 45082743	hit rate : 0.450827
+reqs size : 100000000	hit size : 45082743	hit size rate : 0.450827
+
+time duration : 97296ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : LRU	cache_size : 80000	paramSummary : 
+reqs : 100000000	hits : 47368796	hit rate : 0.473688
+reqs size : 100000000	hit size : 47368796	hit size rate : 0.473688
+
+time duration : 2435962ms
+trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
+cacheType : SFM	cache_size : 10000	paramSummary : 41400004010000
+reqs : 100000000	hits : 43719135	hit rate : 0.437191
+reqs size : 100000000	hit size : 43719135	hit size rate : 0.437191

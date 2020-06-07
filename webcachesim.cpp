@@ -96,6 +96,9 @@ int main(int argc, char *argv[])
                 hits++;
                 hits_size += size;
             }
+            if (reqs % 100000 == 0) {
+                webcache->print_hash_space();
+            }
         }
         //webcache->print_hash_space();
     }

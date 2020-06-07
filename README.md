@@ -152,9 +152,14 @@ example usage
 ## Distributed cache policy
 
 #### Consistent hash
+params: n - the number of caches in cluster, vnode - the number of virtual nodes for each server 
+
+    ./webcachesim test.tr CH 1000 n=4 vnode=40
+
+#### Shuffler Matrix
 params: n - the number of caches in cluster
 
-    ./webcachesim test.tr CH 1000 n=4
+    ./webcachesim test.tr SFM 1000 n=4 vnode=40 alpha=5 W=10000 t=1000
 
 ## How to get traces:
 
@@ -226,13 +231,3 @@ This allows the user interface side to conveniently configure and use your new p
     webcache->setSize(1000);
     // set an arbitrary param (parser implement by yourPolicy)
     webcache->setPar("myPar", "0.94");
-
-## References
-
-We ask academic works, which built on this code, to reference the AdaptSize paper:
-
-    AdaptSize: Orchestrating the Hot Object Memory Cache in a CDN
-    Daniel S. Berger, Ramesh K. Sitaraman, Mor Harchol-Balter
-    To appear in USENIX NSDI in March 2017.
-    
-You can find more information on [USENIX NSDI 2017 here.](https://www.usenix.org/conference/nsdi17/technical-sessions)
