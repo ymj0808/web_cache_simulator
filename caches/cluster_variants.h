@@ -74,7 +74,7 @@ public:
     bool request(SimpleRequest *req);
 };
 
-static Factory<CCHCacheLRUn> factoryCHF("CHF");
+static Factory<CHCacheLRUn> factoryCHF("CHF");
 
 /*
     Shuffler
@@ -143,8 +143,8 @@ protected:
     uint32_t threshold;
     std::chrono::steady_clock::time_point time;
     uint64_t m = 0;          // unique content number
-    //LRUCache *caches_list;   // LRUCaches cluster
-    FilterCache *caches_list;   // LRUCaches cluster
+    LRUCache *caches_list;   // LRUCaches cluster
+    //FilterCache *caches_list;   // LRUCaches cluster
     uint64_t *request_count; // request number of each server in a window
     uint64_t *hit_count;
     uint64_t *miss_count;
