@@ -33,6 +33,12 @@ public:
     // void print_real_node(std::string ip);
 
     // void print();
+
+    // 09262020 Peixuan: uneven cache
+    std::pair<unsigned int, unsigned int> look_up_simple(const std::string &content);
+
+    unsigned int find_nearest_node_simple(unsigned int hash_value);
+
 };
 
 #endif //LEETCODE_MY_HASH_H

@@ -41,6 +41,57 @@ unsigned int MurMurHash(const void *key, int len)
     return h;
 }
 
+// Peixuan 09262020
+unsigned int SimpleHash(const void *key, int len) 
+{
+    const unsigned char *data = (const unsigned char *)key;
+    unsigned int k = *(unsigned int *)data;
+    return k%len;
+}
+
+std::pair<unsigned int, unsigned int> consistent_hash::look_up_simple(const std::string &content)
+{
+    // return the ip of virtual node that serve this content
+    auto hash_position = SimpleHash(content.c_str(), HASH_LEN);
+    auto virtual_node_index = find_nearest_node_simple(hash_position);
+    virtual_node_index++;
+    if (virtual_node_index >= this->sorted_node_hash_list.size())
+    { // cross the zero
+        virtual_node_index = 0;
+    }
+    return std::pair<unsigned int, unsigned int>(virtual_node_index, virtual_node_map.find(sorted_node_hash_list[virtual_node_index])->second.cache_index);
+}
+
+unsigned int consistent_hash::find_nearest_node_simple(unsigned int hash_value)
+{ // find the nearest virtual node for given hash position
+    int low = 0;
+    int high = this->sorted_node_hash_list.size() - 1;
+    int mid;
+    if (hash_value > this->sorted_node_hash_list[high])
+    {
+        return 0;
+    }
+    while (low < high)
+    {
+        mid = (low + high) / 2;
+        if (this->sorted_node_hash_list[mid] == hash_value)
+        {
+            return mid;
+        }
+        else if (this->sorted_node_hash_list[mid] > hash_value)
+        {
+            high = mid;
+        }
+        else
+        { //this->sorted_node_hash_list[mid]<data_hash
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+
+
 consistent_hash::consistent_hash()
 {
     this->real_node_sum = 0;
@@ -121,7 +172,8 @@ void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_nu
         { // find a  virtual node and avoid collision
             cur_port++;
             tmp_ip = ip + ":" + std::to_string(cur_port);
-            tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);
+            //tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);  // 09262020 Peixuan : simple hash
+            tmp_hash = SimpleHash(tmp_ip.c_str(), HASH_LEN);    // 09262020 Peixuan : simple hash
         } while (this->virtual_node_map.find(tmp_hash) != this->virtual_node_map.end());
         vir_node_num++;
         this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
