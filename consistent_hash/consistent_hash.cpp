@@ -180,10 +180,10 @@ void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_nu
         { // find a  virtual node and avoid collision
             cur_port++;
             tmp_ip = ip + ":" + std::to_string(cur_port);
-            //tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);  // 09262020 Peixuan : simple hash
+            tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);  // 09262020 Peixuan : simple hash
             //tmp_hash = SimpleHash(tmp_ip.c_str(), HASH_LEN);    // 09262020 Peixuan : simple hash
-            double ratio = 1/3;
-            tmp_hash = HASH_LEN*ratio*vir_node_num + HASH_LEN*ratio;    // 09262020 Peixuan : simple hash
+            //double ratio = 1/3;
+            //tmp_hash = HASH_LEN*ratio*vir_node_num + HASH_LEN*ratio;    // 09262020 Peixuan : simple hash
         } while (this->virtual_node_map.find(tmp_hash) != this->virtual_node_map.end());
         vir_node_num++;
         this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
