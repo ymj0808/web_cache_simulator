@@ -23,6 +23,8 @@ protected:
     std::list<CacheObject> _cacheList;
     // map to find objects in list
     lruCacheMapType _cacheMap;
+    int _requestNum;                //request counter for a single cache -- ymj
+    std::map<long, int> _uniqueFile;
 
     virtual void hit(lruCacheMapType::const_iterator it, uint64_t size);
 
@@ -30,6 +32,7 @@ public:
     LRUCache()
         : Cache()
     {
+        _requestNum = 0;
     }
     virtual ~LRUCache()
     {
@@ -40,6 +43,8 @@ public:
     virtual void evict(SimpleRequest* req);
     virtual void evict();
     virtual SimpleRequest* evict_return();
+    virtual int requestNum();          //return request number and unique file number   -- ymj
+    virtual int uniqueFileNum();
 };
 
 static Factory<LRUCache> factoryLRU("LRU");

@@ -40,6 +40,14 @@ unsigned int MurMurHash(const void *key, int len)
     h ^= h >> 15;
     return h;
 }
+/*
+unsigned int MurMurHash(const void* key, int len)
+{
+    const unsigned char* data = (const unsigned char*)key;
+    unsigned int k = *(unsigned int*)data;
+    return k % len;
+}
+*/
 
 // Peixuan 09262020
 unsigned int SimpleHash(const void *key, int len) 

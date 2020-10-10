@@ -49,6 +49,7 @@ public:
     virtual void admit(SimpleRequest* req) = 0;
     virtual void evict(SimpleRequest* req) = 0;
     virtual void evict() = 0;
+    virtual void printReqAndFileNum() {};
 
     // configure cache parameters
     virtual void setSize(uint64_t cs) {

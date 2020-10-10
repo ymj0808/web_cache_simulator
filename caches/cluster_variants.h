@@ -43,6 +43,7 @@ public:
     virtual void evict(SimpleRequest *req){};
     virtual void evict(){};
     bool request(SimpleRequest *req);
+    void printReqAndFileNum();          // print request number and file number
 };
 
 static Factory<CHCache> factoryCH("CH");
@@ -201,6 +202,7 @@ public:
     virtual void evict(){};
     virtual void print_hash_space();
     virtual void update();
+    void printReqAndFileNum(); // print request number and file number of each cache -- ymj
 
     bool request(SimpleRequest *req);
     void reset();

@@ -13,6 +13,7 @@
 #include "cluster_variants.h"
 #include "gd_variants.h"
 #include "../random_helper.h"
+using namespace std;
 
 /*
     Consistent hash
@@ -72,6 +73,21 @@ bool CHCache::request(SimpleRequest *req)
         caches_list[cache_index].admit(req);
     }
     return flag;
+}
+
+void CHCache::printReqAndFileNum()
+{
+    cout << "request number: ";
+    for (int i = 0; i < cache_number; i++)
+    {
+        cout << caches_list[i].requestNum() << "  ";
+    }
+    cout << endl << "unique file number: ";
+    for (int i = 0; i < cache_number; i++)
+    {
+        cout << caches_list[i].uniqueFileNum() << "  ";
+    }
+    cout << endl;
 }
 
 /*
@@ -756,6 +772,20 @@ bool ShufflerM::request(SimpleRequest *req)
     return flag;
 }
 
+void ShufflerM::printReqAndFileNum()
+{
+    cout << "request number: ";
+    for (int i = 0; i < cache_number; i++)
+    {
+        cout << caches_list[i].requestNum() << "  ";
+    }
+    cout << endl << "unique file number: ";
+    for (int i = 0; i < cache_number; i++)
+    {
+        cout << caches_list[i].uniqueFileNum() << "  ";
+    }
+    cout << endl;
+}
 
 /*
     Shuffler Matrix Filter ***************************************************************************************

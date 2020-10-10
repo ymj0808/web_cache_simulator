@@ -27,6 +27,11 @@ static inline double oP2(double T, double l, double p) {
 */
 bool LRUCache::lookup(SimpleRequest* req)
 {
+    //update request number and file number  -- ymj    
+    _requestNum += 1;
+    if (_uniqueFile.find(req->getId()) == _uniqueFile.end()) {
+        _uniqueFile.insert(std::pair<long, int>(req->getId(), 1));
+    }
     // CacheObject: defined in cache_object.h 
     CacheObject obj(req);
     // _cacheMap defined in class LRUCache in lru_variants.h 
@@ -105,6 +110,16 @@ void LRUCache::hit(lruCacheMapType::const_iterator it, uint64_t size)
     //
     // _cacheList is defined in class LRUCache in lru_variants.h 
     _cacheList.splice(_cacheList.begin(), _cacheList, it->second);
+}
+
+int LRUCache::requestNum()       //return request number of a single cache -- ymj
+{
+    return _requestNum;
+
+}
+int LRUCache::uniqueFileNum()    //return unique file number processed by this cache -- ymj
+{
+    return _uniqueFile.size();
 }
 
 /*

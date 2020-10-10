@@ -112,6 +112,9 @@ int main(int argc, char *argv[])
     cout << "cacheType : " << cacheType << "\tcache_size : " << cache_size << "\tparamSummary : " << paramSummary << endl;
     cout << "reqs : " << reqs << "\thits : " << hits << "\thit rate : " << double(hits) / reqs << endl;
     cout << "reqs size : " << reqs_size << "\thit size : " << hits_size << "\thit size rate : " << double(hits_size) / reqs_size << endl;
+    if (cacheType == "CH" || cacheType == "SFM") {
+        webcache->printReqAndFileNum();
+    }
 
     outTp << endl;
     outTp << "time duration : " << timeElapsed << "ms" << endl;
