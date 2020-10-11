@@ -106,7 +106,7 @@ public:
     void printReqAndFileNum();          // print request number and file number
 };
 
-static Factory<CHCache> factoryCH("CHUE");
+static Factory<CHCacheUE> factoryCHUE("CHUE");
 
 /*
     Shuffler
