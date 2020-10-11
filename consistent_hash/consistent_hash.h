@@ -14,6 +14,7 @@ public:
     unsigned int virtual_node_sum;
     std::map<std::string, real_node> real_node_map;
     std::map<unsigned int, virtual_node> virtual_node_map;         // hash position to virtual node
+    std::map<unsigned int, virtual_node> virtual_node_map_uid;     // uid to virtual node
     std::vector<unsigned int> sorted_node_hash_list;               // the position of each virtual node on hash ring
 
     consistent_hash();
@@ -27,6 +28,10 @@ public:
     // unsigned int put(std::string data_id);
 
     void add_real_node(std::string ip, unsigned int virtual_node_num);
+
+    void add_real_node_assign(std::string ip, unsigned int vnode_num_to_assign, unsigned int starting_id); // 10102020 Peixuan : uneven hash
+
+    void initial_virtual_node(unsigned int virtual_node_num); // 10102020 Peixuan : uneven hash
 
     // void drop_real_node(std::string ip);
 

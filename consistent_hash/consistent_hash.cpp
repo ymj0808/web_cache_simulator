@@ -226,6 +226,76 @@ void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_nu
               << std::endl;
 }
 
+
+void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_num_to_assign, unsigned int starting_id) // 10102020 Peixuan : uneven hash
+{
+    std::cout << "[add_real_node]\t" << ip << std::endl;
+    real_node *node;
+    if (this->real_node_map.find(ip) != this->real_node_map.end())
+    { // this real node has added before
+        node = &real_node_map[ip];
+    }
+    else
+    {
+        real_node new_node = real_node(ip);
+        node = &new_node;
+        this->real_node_sum++;
+    }
+
+    for (int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
+    {
+        std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
+        this->virtual_node_map_uid[starting_id+assigned_vnode].ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+        this->virtual_node_map_uid[starting_id+assigned_vnode].cache_index = real_node_sum - 1;
+    }
+
+    this->real_node_map[ip] = *node;
+
+    std::cout << "[add_real_node finished]\t" << ip << std::endl
+              << std::endl;
+}
+
+void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 10102020 Peixuan : uneven hash
+{
+    std::cout << "[Initializeing virtual nodes (Peixuan)]: \t" << virtual_node_num << std::endl;
+    unsigned int vir_node_num = 0;
+
+    std::string ip = "0.0.0.0";
+    std::string tmp_ip;    // the ip of virtual node
+    int cur_port = 0;
+    
+    unsigned int tmp_hash = 0; // the position of virtual node on hash ring
+    while (vir_node_num < virtual_node_num)
+    {
+        tmp_ip = ip + ":" + std::to_string(cur_port);
+        double ratio = 1/3;                         // 09262020 Peixuan : simple hash
+        tmp_hash = tmp_hash + (HASH_LEN - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash
+        vir_node_num++;
+
+        // This is from original
+
+        //this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
+        virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
+        this->virtual_node_map[tmp_hash] = new_vnode;
+        this->virtual_node_map_uid[vir_node_num] = new_vnode;
+        
+        this->sorted_node_hash_list.push_back(tmp_hash);
+
+        sort(this->sorted_node_hash_list.begin(), this->sorted_node_hash_list.end());
+
+        unsigned int id = this->find_nearest_node(tmp_hash);
+
+        unsigned int next_id = id + 1;
+
+        if (next_id >= this->sorted_node_hash_list.size())
+        { // cross the zero
+            next_id = 0;
+        }
+        
+    }
+}
+
+
 // void consistent_hash::print_real_node(std::string ip)
 // {
 //     std::cout << "------------consistent_hash.print_real_node------------" << std::endl;

@@ -156,6 +156,87 @@ bool CHCacheLRUn::request(SimpleRequest *req)
 }
 
 /*
+    Uneven consistent hash  // 10112020 Peixuan
+*/
+
+bool CHCacheUE::lookup(SimpleRequest *req)
+{
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    return caches_list[cache_index].lookup(req);
+}
+
+void CHCacheUE::admit(SimpleRequest *req)
+{
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    caches_list[cache_index].admit(req);
+}
+
+void CHCacheUE::setPar(std::string parName, std::string parValue)
+{
+    if (parName.compare("n") == 0)
+    {
+        const int n = stoull(parValue);
+        cache_number = n;
+        caches_list = new LRUCache[cache_number];
+        assert(n > 1);
+        for (int i = 0; i < n; ++i)
+        {
+            caches_list[i].setSize(_cacheSize);
+        }
+    }
+    else if (parName.compare("vnode") == 0)
+    {
+        const int param = stoull(parValue);
+        virtual_node = param;
+    }
+    else
+    {
+        std::cerr << "unrecognized parameter: " << parName << std::endl;
+    }
+}
+
+void CHCacheUE::init_mapper()
+{
+    chash.initial_virtual_node(virtual_node);
+
+    int vnode_per_rnode = virtual_node/4;
+
+    int starting_id = 1;
+    
+    chash.add_real_node_assign("192.168.0.136", vnode_per_rnode, starting_id);
+    chash.add_real_node_assign("192.168.1.137", vnode_per_rnode, starting_id + vnode_per_rnode);
+    chash.add_real_node_assign("192.168.2.138", vnode_per_rnode, starting_id + vnode_per_rnode*2);
+    chash.add_real_node_assign("192.168.3.139", vnode_per_rnode, starting_id + vnode_per_rnode*3);
+}
+
+bool CHCacheUE::request(SimpleRequest *req)
+{
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    //auto cache_index = mapper.find(obj)->second; // redirect to small cache
+    bool flag = caches_list[cache_index].lookup(req);
+    if (!flag)
+    {
+        caches_list[cache_index].admit(req);
+    }
+    return flag;
+}
+
+void CHCacheUE::printReqAndFileNum()
+{
+    cout << "request number: ";
+    for (int i = 0; i < cache_number; i++)
+    {
+        cout << caches_list[i].requestNum() << "  ";
+    }
+    cout << endl << "unique file number: ";
+    for (int i = 0; i < cache_number; i++)
+    {
+        cout << caches_list[i].uniqueFileNum() << "  ";
+    }
+    cout << endl;
+}
+
+/*
     Shuffler ***************************************************************************************
 */
 

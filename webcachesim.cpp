@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     infile.open(path);
 
-    if (cacheType.compare("SF") && cacheType.compare("CH") && cacheType.compare("CHF") && cacheType.compare("SFM") && cacheType.compare("SFMF"))
+    if (cacheType.compare("SF") && cacheType.compare("CH") && cacheType.compare("CHF") && cacheType.compare("CHUE") && cacheType.compare("SFM") && cacheType.compare("SFMF"))
     {
         cout << cacheType << endl;
         while (infile >> t >> id >> size)

@@ -77,6 +77,37 @@ public:
 
 static Factory<CHCacheLRUn> factoryCHF("CHF");
 
+
+/*
+    Uneven consistent hash  // 10112020 Peixuan
+*/
+
+class CHCacheUE : public Cache
+{
+protected:
+    int cache_number;
+    LRUCache *caches_list; // LRUCaches cluster
+    //std::unordered_map<CacheObject, uint8_t> mapper; // map CacheObjec to LRUCache
+    consistent_hash chash;
+    int virtual_node;
+
+public:
+    CHCacheUE() : Cache() {}
+
+    virtual ~CHCache() {}
+
+    virtual void setPar(std::string parName, std::string parValue);
+    void init_mapper();
+    virtual bool lookup(SimpleRequest *req);
+    virtual void admit(SimpleRequest *req);
+    virtual void evict(SimpleRequest *req){};
+    virtual void evict(){};
+    bool request(SimpleRequest *req);
+    void printReqAndFileNum();          // print request number and file number
+};
+
+static Factory<CHCache> factoryCH("CHUE");
+
 /*
     Shuffler
 */

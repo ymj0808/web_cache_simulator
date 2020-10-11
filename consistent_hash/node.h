@@ -11,10 +11,14 @@ public:
     unsigned int hash_value;
     //map<unsigned int, string> data;
     int cache_index;         // the index of its real node
+    int uid;                  // the unique id of this vnode
 
     virtual_node();
 
     virtual_node(std::string ip, unsigned int hash_value, int cache_index);
+
+    virtual_node(std::string ip, unsigned int hash_value, int cache_index, int uid);
+
 
     ~virtual_node();
 };
