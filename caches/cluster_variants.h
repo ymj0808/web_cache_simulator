@@ -94,7 +94,7 @@ protected:
 public:
     CHCacheUE() : Cache() {}
 
-    virtual ~CHCache() {}
+    virtual ~CHCacheUE() {}
 
     virtual void setPar(std::string parName, std::string parValue);
     void init_mapper();
