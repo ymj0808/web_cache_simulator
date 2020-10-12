@@ -229,7 +229,7 @@ void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_nu
 
 void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assign, unsigned int starting_id) // 10102020 Peixuan : uneven hash
 {
-    std::cout << "[add_real_node]\t" << ip << std::endl;
+    std::cout << "[add_real_node_assign]\t" << ip << std::endl;
     real_node *node;
     if (this->real_node_map.find(ip) != this->real_node_map.end())
     { // this real node has added before
@@ -244,8 +244,11 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
 
     for (int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
     {
+        std::cout << "[assiging]\t" << assigned_vnode << " node" << std::endl;  //10122020 Peixuan debig
         std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
+        std::cout << "[Setting tmp ip]\t" << std::endl;                         //10122020 Peixuan debig
         this->virtual_node_map_uid[starting_id+assigned_vnode]->ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+        std::cout << "[Setting realnode index]\t" << std::endl;                         //10122020 Peixuan debig
         this->virtual_node_map_uid[starting_id+assigned_vnode]->cache_index = real_node_sum - 1;
 
         //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************�����µ�ipֵ�����µ�hashֵ������virtual_node_map************** ymj 20201012
