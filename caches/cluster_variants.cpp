@@ -200,7 +200,7 @@ void CHCacheUE::init_mapper()
 {
     //chash.initial_virtual_node(virtual_node); 
 
-    int vnode_per_rnode = virtual_node;
+    unsigned int vnode_per_rnode = virtual_node;
 
     chash.initial_virtual_node(virtual_node * 4);     //ymj 2020 10 12 
 

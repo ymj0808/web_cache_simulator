@@ -31,7 +31,7 @@ public:
 
     void add_real_node(std::string ip, unsigned int virtual_node_num);
 
-    void add_real_node_assign(std::string ip, int vnode_num_to_assign, unsigned int starting_id); // 10102020 Peixuan : uneven hash
+    void add_real_node_assign(std::string ip, unsigned int vnode_num_to_assign, unsigned int starting_id); // 10102020 Peixuan : uneven hash
 
     void initial_virtual_node(unsigned int virtual_node_num); // 10102020 Peixuan : uneven hash
 

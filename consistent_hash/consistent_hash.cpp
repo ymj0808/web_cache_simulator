@@ -227,7 +227,7 @@ void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_nu
 }
 
 
-void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assign, unsigned int starting_id) // 10102020 Peixuan : uneven hash
+void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_num_to_assign, unsigned int starting_id) // 10102020 Peixuan : uneven hash
 {
     std::cout << "[add_real_node_assign]\t" << ip << std::endl;
     real_node *node;
