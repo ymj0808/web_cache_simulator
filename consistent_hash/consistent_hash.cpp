@@ -246,6 +246,9 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
     {
         std::cout << "[assiging]\t" << assigned_vnode << " node" << std::endl;  //10122020 Peixuan debug
         std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
+
+        std::cout << "[UID: ]\t" << starting_id+assigned_vnode << std::endl;                         //10122020 Peixuan debug
+
         std::cout << "[Setting tmp ip]\t" << std::endl;                         //10122020 Peixuan debug
 
         virtual_node vnode = *this->virtual_node_map_uid[starting_id+assigned_vnode];
