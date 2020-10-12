@@ -226,7 +226,7 @@ void CHCacheUE::init_mapper()
         chash.iter++;
     }
 
-    chash.iter_pt = chash.virtual_node_map_uid.begin();
+    /*chash.iter_pt = chash.virtual_node_map_uid.begin();
     std::cout << "chash.virtual_node_map_uid: " << std::endl;
     while(chash.iter_pt != chash.virtual_node_map_uid.end()) {
         //cout << chash.iter->first << " : " << chash.iter->second << endl;
@@ -236,7 +236,7 @@ void CHCacheUE::init_mapper()
         std::cout << "Cache index (uid): " << chash.iter_pt->second->cache_index << std::endl; 
 
         chash.iter++;
-    }
+    }*/
 }
 
 bool CHCacheUE::request(SimpleRequest *req)
