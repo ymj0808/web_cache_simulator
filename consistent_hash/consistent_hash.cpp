@@ -249,6 +249,7 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
         this->virtual_node_map_uid[starting_id+assigned_vnode].cache_index = real_node_sum - 1;
 
         unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************根据新的ip值计算新的hash值，更新virtual_node_map************** ymj 20201012
+                                                                               //            但这样改后，还是只有一个小cache有用，而且这样可能也没有使请求不均衡的效果了
         virtual_node_map[tmp_hash] = virtual_node_map_uid[starting_id + assigned_vnode];  
     }
 
