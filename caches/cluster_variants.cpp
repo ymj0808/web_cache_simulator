@@ -13,7 +13,7 @@
 #include "cluster_variants.h"
 #include "gd_variants.h"
 #include "../random_helper.h"
-#include "../consistent_hash/node.h"
+//#include "../consistent_hash/node.h"
 using namespace std;
 
 /*
@@ -213,11 +213,11 @@ void CHCacheUE::init_mapper()
 
 
     // 10122020 Peixuan debug:
-    map<unsigned int, virtual_node>::iterator iter;
-    iter = chash.virtual_node_map.begin();
-    while(iter != chash.virtual_node_map.end()) {
-        cout << iter->first << " : " << iter->second << endl;
-        iter++;
+    //map<unsigned int, virtual_node>::iterator iter;
+    chash.iter = chash.virtual_node_map.begin();
+    while(chash.iter != chash.virtual_node_map.end()) {
+        cout << chash.iter->first << " : " << chash.iter->second << endl;
+        chash.iter++;
     }
 }
 
