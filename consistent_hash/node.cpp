@@ -7,12 +7,12 @@ virtual_node::virtual_node(std::string ip, unsigned int hash_value, int cache_in
     this->cache_index = cache_index;
 }
 
-/*
+/* 
 virtual_node::virtual_node(std::string ip, unsigned int hash_value, int cache_index)
 {
     virtual_node(ip, hash_value, cache_index, 0);
 }
-*/
+*/              //ymj 2020 10 12
 
 virtual_node::virtual_node(std::string ip, unsigned int hash_value, int cache_index, int uid)
 {

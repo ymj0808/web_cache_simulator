@@ -161,13 +161,13 @@ bool CHCacheLRUn::request(SimpleRequest *req)
 
 bool CHCacheUE::lookup(SimpleRequest *req)
 {
-    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;      //ymj 2020 10 12
     return caches_list[cache_index].lookup(req);
 }
 
 void CHCacheUE::admit(SimpleRequest *req)
 {
-    auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+    auto cache_index = chash.look_up(std::to_string(req->getId())).second;          //ymj 2020 10 12
     caches_list[cache_index].admit(req);
 }
 
@@ -197,9 +197,11 @@ void CHCacheUE::setPar(std::string parName, std::string parValue)
 
 void CHCacheUE::init_mapper()
 {
-    chash.initial_virtual_node(virtual_node);
+    //chash.initial_virtual_node(virtual_node); 
 
-    int vnode_per_rnode = virtual_node/4;
+    int vnode_per_rnode = virtual_node;
+
+    chash.initial_virtual_node(virtual_node * 4);     //ymj 2020 10 12 
 
     int starting_id = 1;
     

@@ -247,6 +247,9 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
         std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
         this->virtual_node_map_uid[starting_id+assigned_vnode].ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
         this->virtual_node_map_uid[starting_id+assigned_vnode].cache_index = real_node_sum - 1;
+
+        unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************根据新的ip值计算新的hash值，更新virtual_node_map************** ymj 20201012
+        virtual_node_map[tmp_hash] = virtual_node_map_uid[starting_id + assigned_vnode];  
     }
 
     this->real_node_map[ip] = *node;
@@ -269,14 +272,14 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
     {
         tmp_ip = ip + ":" + std::to_string(cur_port);
         double ratio = 1/3;                         // 09262020 Peixuan : simple hash
-        tmp_hash = tmp_hash + (HASH_LEN - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash
+        tmp_hash = tmp_hash + (HASH_LEN - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************这里导致了所有的vnode的hash值都一样************   ymj 20201012
         vir_node_num++;
-
+        
         // This is from original
 
         //this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
         virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
-        this->virtual_node_map[tmp_hash] = new_vnode;
+        this->virtual_node_map[tmp_hash] = new_vnode;                // ****************所以这里只存了最后一个vnode的映射关系***********************       ymj 20201012
         this->virtual_node_map_uid[vir_node_num] = new_vnode;
         
         this->sorted_node_hash_list.push_back(tmp_hash);
@@ -293,6 +296,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         }
         
     }
+    this->virtual_node_sum = virtual_node_num;      //ymj 20201012
 }
 
 
