@@ -13,6 +13,7 @@
 #include "cluster_variants.h"
 #include "gd_variants.h"
 #include "../random_helper.h"
+#include "../consistent_hash/node.h"
 using namespace std;
 
 /*
@@ -209,6 +210,15 @@ void CHCacheUE::init_mapper()
     chash.add_real_node_assign("192.168.1.137", vnode_per_rnode, starting_id + vnode_per_rnode);
     chash.add_real_node_assign("192.168.2.138", vnode_per_rnode, starting_id + vnode_per_rnode*2);
     chash.add_real_node_assign("192.168.3.139", vnode_per_rnode, starting_id + vnode_per_rnode*3);
+
+
+    // 10122020 Peixuan debug:
+    map<unsigned int, virtual_node>::iterator iter;
+    iter = chash.virtual_node_map.begin();
+    while(iter != chash.virtual_node_map.end()) {
+        cout << iter->first << " : " << iter->second << endl;
+        iter++;
+    }
 }
 
 bool CHCacheUE::request(SimpleRequest *req)

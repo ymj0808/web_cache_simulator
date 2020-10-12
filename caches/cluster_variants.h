@@ -12,6 +12,7 @@
 #include "../consistent_hash/consistent_hash.h"
 #include "../matrix.h"
 #include "../double_queue_node/double_queue_node.h"
+#include "../consistent_hash/node.h"
 #include <chrono>
 
 /*
