@@ -245,12 +245,12 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
     for (int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
     {
         std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
-        this->virtual_node_map_uid[starting_id+assigned_vnode].ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
-        this->virtual_node_map_uid[starting_id+assigned_vnode].cache_index = real_node_sum - 1;
+        this->virtual_node_map_uid[starting_id+assigned_vnode]->ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+        this->virtual_node_map_uid[starting_id+assigned_vnode]->cache_index = real_node_sum - 1;
 
-        unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************�����µ�ipֵ�����µ�hashֵ������virtual_node_map************** ymj 20201012
+        //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************�����µ�ipֵ�����µ�hashֵ������virtual_node_map************** ymj 20201012
                                                                                //            �������ĺ󣬻���ֻ��һ��Сcache���ã�������������Ҳû��ʹ���󲻾����Ч����
-        virtual_node_map[tmp_hash] = virtual_node_map_uid[starting_id + assigned_vnode];  
+        //virtual_node_map[tmp_hash] = virtual_node_map_uid[starting_id + assigned_vnode];  
     }
 
     this->real_node_map[ip] = *node;
@@ -281,7 +281,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         //this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
         virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
         this->virtual_node_map[tmp_hash] = new_vnode;                // ****************��������ֻ�������һ��vnode��ӳ���ϵ***********************       ymj 20201012
-        this->virtual_node_map_uid[vir_node_num] = new_vnode;
+        this->virtual_node_map_uid[vir_node_num] = &new_vnode;
         
         this->sorted_node_hash_list.push_back(tmp_hash);
 
