@@ -244,12 +244,23 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
 
     for (int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
     {
-        std::cout << "[assiging]\t" << assigned_vnode << " node" << std::endl;  //10122020 Peixuan debig
+        std::cout << "[assiging]\t" << assigned_vnode << " node" << std::endl;  //10122020 Peixuan debug
         std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
-        std::cout << "[Setting tmp ip]\t" << std::endl;                         //10122020 Peixuan debig
-        this->virtual_node_map_uid[starting_id+assigned_vnode]->ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
-        std::cout << "[Setting realnode index]\t" << std::endl;                         //10122020 Peixuan debig
-        this->virtual_node_map_uid[starting_id+assigned_vnode]->cache_index = real_node_sum - 1;
+        std::cout << "[Setting tmp ip]\t" << std::endl;                         //10122020 Peixuan debug
+
+        //virtual_node vnode = *this->virtual_node_map_uid[starting_id+assigned_vnode];
+
+        //vnode.ip = tmp_ip; //10122020 Peixuan debug
+
+        //this->virtual_node_map_uid[starting_id+assigned_vnode]->ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+        
+        this->virtual_node_map_uid[starting_id+assigned_vnode]->SetIP(tmp_ip); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+
+        std::cout << "[Setting realnode index]\t" << std::endl;                         //10122020 Peixuan debug
+        //vnode.cache_index = real_node_sum - 1; //10122020 Peixuan debug
+        //this->virtual_node_map_uid[starting_id+assigned_vnode]->cache_index = real_node_sum - 1;
+
+        this->virtual_node_map_uid[starting_id+assigned_vnode]->SetCacheIndex(real_node_sum - 1);
 
         //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************�����µ�ipֵ�����µ�hashֵ������virtual_node_map************** ymj 20201012
                                                                                //            �������ĺ󣬻���ֻ��һ��Сcache���ã�������������Ҳû��ʹ���󲻾����Ч����

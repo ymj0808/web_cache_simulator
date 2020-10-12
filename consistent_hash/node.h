@@ -19,8 +19,16 @@ public:
 
     virtual_node(std::string ip, unsigned int hash_value, int cache_index, int uid);
 
-
     ~virtual_node();
+
+    void SetIP(std::string ip);
+    
+    void SetHashValue(unsigned int hash_value);
+
+    void SetCacheIndex(int cache_index);
+
+    void SetUid(int uid);
+
 };
 
 class real_node
