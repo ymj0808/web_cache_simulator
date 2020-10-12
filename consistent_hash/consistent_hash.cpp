@@ -251,22 +251,26 @@ void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_nu
 
         std::cout << "[Setting tmp ip]\t" << std::endl;                         //10122020 Peixuan debug
 
-        virtual_node vnode = *this->virtual_node_map_uid[starting_id+assigned_vnode];
+        //virtual_node vnode = *this->virtual_node_map_uid[starting_id+assigned_vnode];
 
-        std::cout << "[Getting vnode]\t" << std::endl;                         //10122020 Peixuan debug
+        //std::cout << "[Getting vnode]\t" << std::endl;                         //10122020 Peixuan debug
 
+        unsigned int hash_value = this->uid_map_hash_value[starting_id+assigned_vnode];
 
         //vnode.ip = tmp_ip; //10122020 Peixuan debug
 
         //this->virtual_node_map_uid[starting_id+assigned_vnode]->ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
         
-        this->virtual_node_map_uid[starting_id+assigned_vnode]->SetIP(tmp_ip); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+        //this->virtual_node_map_uid[starting_id+assigned_vnode]->SetIP(tmp_ip); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
+        
+        this->virtual_node_map[hash_value].SetIP(tmp_ip); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
 
         std::cout << "[Setting realnode index]\t" << std::endl;                         //10122020 Peixuan debug
         //vnode.cache_index = real_node_sum - 1; //10122020 Peixuan debug
         //this->virtual_node_map_uid[starting_id+assigned_vnode]->cache_index = real_node_sum - 1;
 
-        this->virtual_node_map_uid[starting_id+assigned_vnode]->SetCacheIndex(real_node_sum - 1);
+        //this->virtual_node_map_uid[starting_id+assigned_vnode]->SetCacheIndex(real_node_sum - 1);
+        this->virtual_node_map[hash_value].SetCacheIndex(real_node_sum - 1); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
 
         //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************�����µ�ipֵ�����µ�hashֵ������virtual_node_map************** ymj 20201012
                                                                                //            �������ĺ󣬻���ֻ��һ��Сcache���ã�������������Ҳû��ʹ���󲻾����Ч����
@@ -302,6 +306,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
         this->virtual_node_map[tmp_hash] = new_vnode;                // ****************��������ֻ�������һ��vnode��ӳ���ϵ***********************       ymj 20201012
         this->virtual_node_map_uid[vir_node_num] = &new_vnode;
+        this->uid_map_hash_value[vir_node_num] = tmp_hash;
         
         this->sorted_node_hash_list.push_back(tmp_hash);
 
