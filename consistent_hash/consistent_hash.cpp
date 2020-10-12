@@ -248,8 +248,8 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
         this->virtual_node_map_uid[starting_id+assigned_vnode].ip = tmp_ip; // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
         this->virtual_node_map_uid[starting_id+assigned_vnode].cache_index = real_node_sum - 1;
 
-        unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************¸ù¾ÝÐÂµÄipÖµ¼ÆËãÐÂµÄhashÖµ£¬¸üÐÂvirtual_node_map************** ymj 20201012
-                                                                               //            µ«ÕâÑù¸Äºó£¬»¹ÊÇÖ»ÓÐÒ»¸öÐ¡cacheÓÐÓÃ£¬¶øÇÒÕâÑù¿ÉÄÜÒ²Ã»ÓÐÊ¹ÇëÇó²»¾ùºâµÄÐ§¹ûÁË
+        unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************ï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½ipÖµï¿½ï¿½ï¿½ï¿½ï¿½Âµï¿½hashÖµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½virtual_node_map************** ymj 20201012
+                                                                               //            ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äºó£¬»ï¿½ï¿½ï¿½Ö»ï¿½ï¿½Ò»ï¿½ï¿½Ð¡cacheï¿½ï¿½ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²Ã»ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ó²»¾ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½
         virtual_node_map[tmp_hash] = virtual_node_map_uid[starting_id + assigned_vnode];  
     }
 
@@ -273,14 +273,14 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
     {
         tmp_ip = ip + ":" + std::to_string(cur_port);
         double ratio = 1/3;                         // 09262020 Peixuan : simple hash
-        tmp_hash = tmp_hash + (HASH_LEN - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************ÕâÀïµ¼ÖÂÁËËùÓÐµÄvnodeµÄhashÖµ¶¼Ò»Ñù************   ymj 20201012
+        tmp_hash = tmp_hash + (HASH_LEN - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************ï¿½ï¿½ï¿½ïµ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½vnodeï¿½ï¿½hashÖµï¿½ï¿½Ò»ï¿½ï¿½************   ymj 20201012
         vir_node_num++;
         
         // This is from original
 
         //this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
         virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
-        this->virtual_node_map[tmp_hash] = new_vnode;                // ****************ËùÒÔÕâÀïÖ»´æÁË×îºóÒ»¸övnodeµÄÓ³Éä¹ØÏµ***********************       ymj 20201012
+        this->virtual_node_map[tmp_hash] = new_vnode;                // ****************ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½vnodeï¿½ï¿½Ó³ï¿½ï¿½ï¿½Ïµ***********************       ymj 20201012
         this->virtual_node_map_uid[vir_node_num] = new_vnode;
         
         this->sorted_node_hash_list.push_back(tmp_hash);
