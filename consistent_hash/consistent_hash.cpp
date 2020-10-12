@@ -242,7 +242,7 @@ void consistent_hash::add_real_node_assign(std::string ip, int vnode_num_to_assi
         this->real_node_sum++;
     }
 
-    for (int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
+    for (unsigned int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
     {
         std::cout << "[assiging]\t" << assigned_vnode << " node" << std::endl;  //10122020 Peixuan debug
         std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
