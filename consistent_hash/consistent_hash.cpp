@@ -304,11 +304,17 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
 
         std::string max_str = "255.255.255.255:65535";
         unsigned int max_hash = MurMurHash(max_str.c_str(), HASH_LEN); // 10122020 Peixuan: getting a large hash value for the maximum hash value
+        std::cout << "[Max hash (Peixuan)]: \t" << max_hash << std::endl;
+
 
         double ratio = 1/4;                         // 09262020 Peixuan : simple hash
         //tmp_hash = tmp_hash + (max_hash - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************���ﵼ�������е�vnode��hashֵ��һ��************   ymj 20201012
         tmp_hash_dub = tmp_hash + (max_hash - tmp_hash)*ratio;
+        std::cout << "[tmp hash (Peixuan)]: \t" << tmp_hash << " + " << (max_hash - tmp_hash) << "*" << ratio << "=" << tmp_hash_dub << std::endl;
+
         tmp_hash = (unsigned int) tmp_hash_dub;
+        std::cout << "[tmp hash dub (Peixuan)]: \t" << tmp_hash << std::endl;
+        
 
         vir_node_num++;
         
