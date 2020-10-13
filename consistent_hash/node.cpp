@@ -43,7 +43,7 @@ void virtual_node::SetIP(std::string ip)
 void virtual_node::SetHashValue(unsigned int hash_value)
 {
     this->hash_value = hash_value;
-    //std::cout << "[SetHashValue = ]]\t" << this->hash_value << std::endl; // 10122020 Peixuan vnode debug 
+    //std::cout << "[SetHashValue = ]]\t" << this->hash_value << std::endl; // 10122020 Peixuan vnode debug
 }
 
 
