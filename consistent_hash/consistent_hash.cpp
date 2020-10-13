@@ -245,8 +245,8 @@ void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_nu
     for (unsigned int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign; assigned_vnode++)
     {
         std::cout << "[assiging]\t" << assigned_vnode << " node" << std::endl;  //10122020 Peixuan debug
-        std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode);
-
+        std::string tmp_ip = ip + ":" + std::to_string(assigned_vnode); 
+        
         std::cout << "[UID: ]\t" << starting_id+assigned_vnode << std::endl;                         //10122020 Peixuan debug
 
         //std::cout << "[Setting tmp ip]\t" << std::endl;                         //10122020 Peixuan debug
@@ -256,6 +256,10 @@ void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_nu
         //std::cout << "[Getting vnode]\t" << std::endl;                         //10122020 Peixuan debug
 
         unsigned int hash_value = this->uid_map_hash_value[starting_id+assigned_vnode];
+
+        std::cout << "[UID = ]\t" << this->virtual_node_map[hash_value].uid << std::endl;
+
+        std::cout << "[Hash_Value = ]\t" << this->virtual_node_map[hash_value].hash_value << std::endl;
 
         //vnode.ip = tmp_ip; //10122020 Peixuan debug
 
