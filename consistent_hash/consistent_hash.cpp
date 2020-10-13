@@ -286,7 +286,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
 
         //std::string max_str = "255.255.255.255:65535";
         //unsigned int max_hash = MurMurHash(max_str.c_str(), HASH_LEN); // 10122020 Peixuan: getting a large hash value for the maximum hash value
-        unsigned int max_hash = 4 294 967 295;     //   ymj 20201013
+        unsigned int max_hash = 4294967295;     //   ymj 20201013
 
         //std::cout << "[Max hash (Peixuan)]: \t" << max_hash << std::endl;
 
