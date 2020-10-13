@@ -307,11 +307,12 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         std::cout << "[Max hash (Peixuan)]: \t" << max_hash << std::endl;
 
 
-        double ratio = 1/4;                         // 09262020 Peixuan : simple hash
+        double ratio = 0.25;                         // 09262020 Peixuan : simple hash
         //tmp_hash = tmp_hash + (max_hash - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************���ﵼ�������е�vnode��hashֵ��һ��************   ymj 20201012
         
         std::cout << "[ratio (Peixuan)]: \t" << ratio << std::endl;
         std::cout << "[1/4 (Peixuan)]: \t" << 1/4 << std::endl;
+        std::cout << "[1/4 (Peixuan)]: \t" << 0.25 << std::endl;
         
         tmp_hash_dub = tmp_hash + (max_hash - tmp_hash)*ratio;
         std::cout << "[tmp hash (Peixuan)]: \t" << tmp_hash << " + " << (max_hash - tmp_hash) << "*" << ratio << "=" << tmp_hash_dub << std::endl;
