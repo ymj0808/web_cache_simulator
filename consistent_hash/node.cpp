@@ -37,21 +37,26 @@ virtual_node::virtual_node()
 void virtual_node::SetIP(std::string ip)
 {
     this->ip = ip;
+    std::cout << "[SetIP = ]]\t" << this->ip << std::endl;
 }
 
 void virtual_node::SetHashValue(unsigned int hash_value)
 {
     this->hash_value = hash_value;
+    std::cout << "[SetHashValue = ]]\t" << this->hash_value << std::endl;
 }
+
 
 void virtual_node::SetCacheIndex(int cache_index)
 {
     this->cache_index = cache_index;
+    std::cout << "[SetCacheIndex = ]]\t" << this->cache_index << std::endl;
 }
 
 void virtual_node::SetUid(int uid)
 {
     this->uid = uid;
+    std::cout << "[SetUID = ]]\t" << this->uid << std::endl;
 }
 
 real_node::real_node(std::string ip)
