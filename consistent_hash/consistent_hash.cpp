@@ -259,9 +259,8 @@ void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_nu
 
         this->virtual_node_map[hash_value].SetCacheIndex(real_node_sum - 1); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
 
-        //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //*****************�����µ�ipֵ�����µ�hashֵ������virtual_node_map************** ymj 20201012
-                                                                               //            �������ĺ󣬻���ֻ��һ��Сcache���ã�������������Ҳû��ʹ���󲻾����Ч����
-        
+        //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //
+
     }
 
     this->real_node_map[ip] = *node;
@@ -285,13 +284,16 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
     {
         tmp_ip = ip + ":" + std::to_string(cur_port);
 
-        std::string max_str = "255.255.255.255:65535";
-        unsigned int max_hash = MurMurHash(max_str.c_str(), HASH_LEN); // 10122020 Peixuan: getting a large hash value for the maximum hash value
+        //std::string max_str = "255.255.255.255:65535";
+        //unsigned int max_hash = MurMurHash(max_str.c_str(), HASH_LEN); // 10122020 Peixuan: getting a large hash value for the maximum hash value
+        unsigned int max_hash = 4 294 967 295;     //   ymj 20201013
+
         //std::cout << "[Max hash (Peixuan)]: \t" << max_hash << std::endl;
 
 
         double ratio = 0.25;                         // 09262020 Peixuan : simple hash
-        //tmp_hash = tmp_hash + (max_hash - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************���ﵼ�������е�vnode��hashֵ��һ��************   ymj 20201012
+
+        //tmp_hash = tmp_hash + (max_hash - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash   
         
         tmp_hash_dub = tmp_hash + (max_hash - tmp_hash)*ratio;
         //std::cout << "[tmp hash (Peixuan)]: \t" << tmp_hash << " + " << (max_hash - tmp_hash) << "*" << ratio << "=" << tmp_hash_dub << std::endl;
