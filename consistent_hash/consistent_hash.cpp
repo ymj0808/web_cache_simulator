@@ -307,6 +307,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         // This is from original
 
         //this->virtual_node_map[tmp_hash] = virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
+        std::cout << "[This is vnodes (Peixuan)]: \t" << vir_node_num << std::endl;
         virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
         this->virtual_node_map[tmp_hash] = new_vnode;                // ****************��������ֻ�������һ��vnode��ӳ���ϵ***********************       ymj 20201012
         this->virtual_node_map_uid[vir_node_num] = &new_vnode;
