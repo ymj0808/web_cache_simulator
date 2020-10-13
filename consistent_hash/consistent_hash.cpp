@@ -297,11 +297,19 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
     int cur_port = 0;
     
     unsigned int tmp_hash = 0; // the position of virtual node on hash ring
+    double tmp_hash_dub = 0;   // the position of virtual node on hash ring
     while (vir_node_num < virtual_node_num)
     {
         tmp_ip = ip + ":" + std::to_string(cur_port);
-        double ratio = 1/3;                         // 09262020 Peixuan : simple hash
-        tmp_hash = tmp_hash + (HASH_LEN - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************���ﵼ�������е�vnode��hashֵ��һ��************   ymj 20201012
+
+        std::string max_str = "255.255.255.255:65535";
+        unsigned int max_hash = MurMurHash(max_str.c_str(), HASH_LEN); // 10122020 Peixuan: getting a large hash value for the maximum hash value
+
+        double ratio = 1/4;                         // 09262020 Peixuan : simple hash
+        //tmp_hash = tmp_hash + (max_hash - tmp_hash)*ratio;    // 09262020 Peixuan : simple hash    ************���ﵼ�������е�vnode��hashֵ��һ��************   ymj 20201012
+        tmp_hash_dub = tmp_hash + (max_hash - tmp_hash)*ratio;
+        tmp_hash = (unsigned int) tmp_hash_dub;
+
         vir_node_num++;
         
         // This is from original
@@ -310,7 +318,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         std::cout << "[This is vnodes (Peixuan)]: \t" << vir_node_num << std::endl;
         virtual_node new_vnode = virtual_node(tmp_ip, tmp_hash, 0, vir_node_num); // uid starting from 1
 
-        new_vnode.SetUid(virtual_node_num);
+        new_vnode.SetUid(vir_node_num);
         new_vnode.SetHashValue(tmp_hash);
 
         this->virtual_node_map[tmp_hash] = new_vnode;                // ****************��������ֻ�������һ��vnode��ӳ���ϵ***********************       ymj 20201012
