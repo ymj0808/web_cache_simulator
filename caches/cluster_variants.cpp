@@ -219,7 +219,7 @@ void CHCacheUE::init_mapper()
     while(chash.iter != chash.virtual_node_map.end()) {
         //cout << chash.iter->first << " : " << chash.iter->second << endl;
 
-        std::cout << "ID: " << chash.iter->first << std::endl;
+        std::cout << "ID: " << chash.iter->second.uid << std::endl;
         std::cout << "Hash value: " << chash.iter->second.hash_value << std::endl; 
         std::cout << "Cache index: " << chash.iter->second.cache_index << std::endl; 
 
