@@ -214,7 +214,7 @@ void CHCacheUE::init_mapper()
 
     // 10122020 Peixuan debug:
     //map<unsigned int, virtual_node>::iterator iter;
-    chash.iter = chash.virtual_node_map.begin();
+    /*chash.iter = chash.virtual_node_map.begin();
     std::cout << "chash.virtual_node_map: " << std::endl;
     while(chash.iter != chash.virtual_node_map.end()) {
         //cout << chash.iter->first << " : " << chash.iter->second << endl;
@@ -222,18 +222,6 @@ void CHCacheUE::init_mapper()
         std::cout << "ID: " << chash.iter->second.uid << std::endl;
         std::cout << "Hash value: " << chash.iter->second.hash_value << std::endl; 
         std::cout << "Cache index: " << chash.iter->second.cache_index << std::endl; 
-
-        chash.iter++;
-    }
-
-    /*chash.iter_pt = chash.virtual_node_map_uid.begin();
-    std::cout << "chash.virtual_node_map_uid: " << std::endl;
-    while(chash.iter_pt != chash.virtual_node_map_uid.end()) {
-        //cout << chash.iter->first << " : " << chash.iter->second << endl;
-
-        std::cout << "ID (uid): " << chash.iter_pt->first << std::endl;
-        std::cout << "Hash value (uid): " << chash.iter_pt->second->hash_value << std::endl; 
-        std::cout << "Cache index (uid): " << chash.iter_pt->second->cache_index << std::endl; 
 
         chash.iter++;
     }*/
