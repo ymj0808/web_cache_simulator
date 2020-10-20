@@ -58,10 +58,20 @@ void CHCache::setPar(std::string parName, std::string parValue)
 
 void CHCache::init_mapper()
 {
-    chash.add_real_node("192.168.0.136", virtual_node);
-    chash.add_real_node("192.168.1.137", virtual_node);
-    chash.add_real_node("192.168.2.138", virtual_node);
-    chash.add_real_node("192.168.3.139", virtual_node);
+    int ip_seg_3 = 0;
+    int ip_seg_4 = 136;
+    string ip = "";
+    //chash.add_real_node("192.168.0.136", virtual_node);
+    //chash.add_real_node("192.168.1.137", virtual_node);
+    //chash.add_real_node("192.168.2.138", virtual_node);
+    //chash.add_real_node("192.168.3.139", virtual_node);
+    for(int rnode_num = 0; rnode_num < cache_number; rnode_num++) {
+        ip = "192.168.0" + std::to_string(ip_seg_3) + "." + std::to_string(ip_seg_4);
+        chash.add_real_node("192.168.0.136", virtual_node);
+        ip_seg_3++;
+        ip_seg_4++;
+    }
+
 }
 
 bool CHCache::request(SimpleRequest *req)
