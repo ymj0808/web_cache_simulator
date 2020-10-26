@@ -115,7 +115,7 @@ bool CHCacheLRUn::lookup(SimpleRequest *req)
     auto cache_index = chash.look_up(std::to_string(req->getId())).second;
 
     // Peixuan 102620202: Log of file mapping
-    ifstream fileMapLog;
+    fstream fileMapLog;
     fileMapLog.open("fileMap.txt");
     fileMapLog << std::to_string(req->getId()) + " : " + std::to_string(cache_index);
     fileMapLog.close();
