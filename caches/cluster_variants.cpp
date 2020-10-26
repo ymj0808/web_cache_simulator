@@ -31,6 +31,10 @@ bool CHCache::lookup(SimpleRequest *req)
     fileMapLog << std::to_string(req->getId()) + " : " + std::to_string(cache_index);
     fileMapLog.close();
 
+    ofstream SaveFile("testFile.txt");
+    SaveFile << "This is a test file: " << std::to_string(req->getId()) << " : " << std::to_string(cache_index);
+    SaveFile.close();
+
 
     return caches_list[cache_index].lookup(req);
 }
