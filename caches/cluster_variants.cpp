@@ -14,7 +14,7 @@
 #include "gd_variants.h"
 #include "../random_helper.h"
 //#include "../consistent_hash/node.h"
-#include <fstream.h>
+#include <fstream>
 using namespace std;
 
 /*
