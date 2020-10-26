@@ -116,7 +116,7 @@ bool CHCacheLRUn::lookup(SimpleRequest *req)
 
     // Peixuan 102620202: Log of file mapping
     ifstream fileMapLog;
-    fileMapLog.open(“fileMap.txt”);
+    fileMapLog.open("fileMap.txt");
     fileMapLog << std::to_string(req->getId()) + " : " + std::to_string(cache_index);
     fileMapLog.close();
 
