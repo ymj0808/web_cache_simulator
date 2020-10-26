@@ -111,7 +111,7 @@ void CHCache::printReqAndFileNum()
     }
 
     std::map<std::string, unsigned int> fileID_rnode_map = chash.fileID_rnode_map;
-    std::map<std::string, unsigned int>::iterator iter;
+    //std::map<std::string, unsigned int>::iterator iter;
     iter = fileID_rnode_map.begin();
     while(iter != fileID_rnode_map.end()) {
         cout << iter->first << " :[rnode] " << iter->second << endl;
