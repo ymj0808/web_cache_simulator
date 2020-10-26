@@ -100,13 +100,21 @@ void CHCache::printReqAndFileNum()
     }
     cout << endl;
 
-    // 10262020 Peixuan: print file mapping
+    // 10262020 Peixuan: print file mapping 
 
-    std::map<std::string, real_node> real_node_map = chash.real_node_map;
-    std::map<std::string, real_node>::iterator iter;
-    iter = real_node_map.begin();
-    while(iter != real_node_map.end()) {
-        cout << iter->first << " : " << iter->second.ip << endl;
+    std::map<std::string, unsigned int> fileID_vnode_map = chash.fileID_vnode_map;
+    std::map<std::string, unsigned int>::iterator iter;
+    iter = fileID_vnode_map.begin();
+    while(iter != fileID_vnode_map.end()) {
+        cout << iter->first << " :[vnode] " << iter->second << endl;
+        iter++;
+    }
+
+    std::map<std::string, unsigned int> fileID_rnode_map = chash.fileID_rnode_map;
+    std::map<std::string, unsigned int>::iterator iter;
+    iter = fileID_rnode_map.begin();
+    while(iter != fileID_rnode_map.end()) {
+        cout << iter->first << " :[rnode] " << iter->second << endl;
         iter++;
     }
 }

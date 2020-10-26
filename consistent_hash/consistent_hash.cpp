@@ -151,6 +151,11 @@ std::pair<unsigned int, unsigned int> consistent_hash::look_up(const std::string
     { // cross the zero
         virtual_node_index = 0;
     }
+
+    // Peixuan 10262020: File : vnode and rnode map:
+    fileID_vnode_map[content] = virtual_node_index;
+    fileID_rnode_map[content] = virtual_node_map.find(sorted_node_hash_list[virtual_node_index])->second.cache_index;
+
     return std::pair<unsigned int, unsigned int>(virtual_node_index, virtual_node_map.find(sorted_node_hash_list[virtual_node_index])->second.cache_index);
 }
 

@@ -19,6 +19,8 @@ public:
     std::map<unsigned int, virtual_node>::iterator iter;           // debug iterator 10122020Peixuan
     //std::map<unsigned int, virtual_node*>::iterator iter_pt;           // debug iterator 10122020Peixuan
     std::vector<unsigned int> sorted_node_hash_list;               // the position of each virtual node on hash ring
+    std::map<std::string, unsigned int> fileID_vnode_map; // Peixuan 10262020: File ID to virtual node map
+    std::map<std::string, unsigned int> fileID_rnode_map; // Peixuan 10262020: File ID to real node map
 
     consistent_hash();
 
