@@ -24,6 +24,14 @@ using namespace std;
 bool CHCache::lookup(SimpleRequest *req)
 {
     auto cache_index = chash.look_up(std::to_string(req->getId())).second;
+
+    // Peixuan 102620202: Log of file mapping
+    fstream fileMapLog;
+    fileMapLog.open("fileMap.txt");
+    fileMapLog << std::to_string(req->getId()) + " : " + std::to_string(cache_index);
+    fileMapLog.close();
+
+
     return caches_list[cache_index].lookup(req);
 }
 
@@ -113,13 +121,6 @@ void CHCache::printReqAndFileNum()
 bool CHCacheLRUn::lookup(SimpleRequest *req)
 {
     auto cache_index = chash.look_up(std::to_string(req->getId())).second;
-
-    // Peixuan 102620202: Log of file mapping
-    fstream fileMapLog;
-    fileMapLog.open("fileMap.txt");
-    fileMapLog << std::to_string(req->getId()) + " : " + std::to_string(cache_index);
-    fileMapLog.close();
-
     return caches_list[cache_index].lookup(req);
 }
 
