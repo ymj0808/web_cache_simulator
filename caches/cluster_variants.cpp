@@ -99,6 +99,16 @@ void CHCache::printReqAndFileNum()
         cout << caches_list[i].uniqueFileNum() << "  ";
     }
     cout << endl;
+
+    // 10262020 Peixuan: print file mapping
+
+    std::map<std::string, real_node> real_node_map = chash.real_node_map;
+    std::map<std::string, real_node>::iterator iter;
+    iter = real_node_map.begin();
+    while(iter != real_node_map.end()) {
+        cout << iter->first << " : " << iter->second.ip << endl;
+        iter++;
+    }
 }
 
 /*

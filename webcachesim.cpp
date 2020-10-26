@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     delete req;
 
     // Peixuan 10262020 Record File mapping:
-    if (cacheType.compare("SF") && cacheType.compare("CH") && cacheType.compare("CHF") && cacheType.compare("CHUE") && cacheType.compare("SFM") && cacheType.compare("SFMF"))
+    /*if (cacheType.compare("SF") && cacheType.compare("CH") && cacheType.compare("CHF") && cacheType.compare("CHUE") && cacheType.compare("SFM") && cacheType.compare("SFMF"))
     {
         std::map<std::string, real_node> real_node_map = webcache->chash->real_node_map;
         std::map<std::string, real_node>::iterator iter;
@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
             cout << iter->first << " : " << iter->second.ip << endl;
             iter++;
         }
-    }
+    }*/
     
 
     infile.close();
