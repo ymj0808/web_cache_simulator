@@ -14,7 +14,6 @@
 #include "gd_variants.h"
 #include "../random_helper.h"
 //#include "../consistent_hash/node.h"
-#include <fstream>
 using namespace std;
 
 /*
@@ -24,18 +23,6 @@ using namespace std;
 bool CHCache::lookup(SimpleRequest *req)
 {
     auto cache_index = chash.look_up(std::to_string(req->getId())).second;
-
-    // Peixuan 102620202: Log of file mapping
-    fstream fileMapLog;
-    fileMapLog.open("fileMap.txt");
-    fileMapLog << std::to_string(req->getId()) + " : " + std::to_string(cache_index);
-    fileMapLog.close();
-
-    ofstream SaveFile("testFile.txt");
-    SaveFile << "This is a test file: " << std::to_string(req->getId()) << " : " << std::to_string(cache_index);
-    SaveFile.close();
-
-
     return caches_list[cache_index].lookup(req);
 }
 
