@@ -72,6 +72,20 @@ void CHCache::init_mapper()
         ip_seg_4++;
     }
 
+    // 10262020 Peixuan debug printing vnode hash_value:
+
+    chash.iter = chash.virtual_node_map.begin();
+    std::cout << "chash.virtual_node_map: " << std::endl;
+    while(chash.iter != chash.virtual_node_map.end()) {
+        //cout << chash.iter->first << " : " << chash.iter->second << endl;
+
+        std::cout << "ID: " << chash.iter->second.uid << std::endl;
+        std::cout << "Hash value: " << chash.iter->second.hash_value << std::endl; 
+        std::cout << "Cache index: " << chash.iter->second.cache_index << std::endl; 
+
+        chash.iter++;
+    }
+
 }
 
 bool CHCache::request(SimpleRequest *req)
@@ -102,8 +116,9 @@ void CHCache::printReqAndFileNum()
 
     // 10262020 Peixuan: print file mapping 
 
+    /*std::map<std::string, unsigned int>::iterator iter;
+
     std::map<std::string, unsigned int> fileID_vnode_map = chash.fileID_vnode_map;
-    std::map<std::string, unsigned int>::iterator iter;
     iter = fileID_vnode_map.begin();
     while(iter != fileID_vnode_map.end()) {
         cout << iter->first << " :[vnode] " << iter->second << endl;
@@ -111,12 +126,13 @@ void CHCache::printReqAndFileNum()
     }
 
     std::map<std::string, unsigned int> fileID_rnode_map = chash.fileID_rnode_map;
-    //std::map<std::string, unsigned int>::iterator iter;
     iter = fileID_rnode_map.begin();
     while(iter != fileID_rnode_map.end()) {
         cout << iter->first << " :[rnode] " << iter->second << endl;
         iter++;
-    }
+    }*/
+
+
 }
 
 /*
