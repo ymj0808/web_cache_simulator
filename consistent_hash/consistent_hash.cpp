@@ -144,7 +144,7 @@ unsigned int consistent_hash::find_nearest_node(unsigned int hash_value)
 std::pair<unsigned int, unsigned int> consistent_hash::look_up(const std::string &content)
 {
     // return the ip of virtual node that serve this content
-    auto hash_position = MurMurHash(content.c_str(), HASH_LEN);
+    auto hash_position = MurMurHash(content.c_str(), content.length());
     auto virtual_node_index = find_nearest_node(hash_position);
     virtual_node_index++;
     if (virtual_node_index >= this->sorted_node_hash_list.size())
@@ -185,7 +185,7 @@ void consistent_hash::add_real_node(std::string ip, unsigned int virtual_node_nu
         { // find a  virtual node and avoid collision
             cur_port++;
             tmp_ip = ip + ":" + std::to_string(cur_port);
-            tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);  // 09262020 Peixuan : simple hash
+            tmp_hash = MurMurHash(tmp_ip.c_str(), tmp_ip.length());  // 09262020 Peixuan : simple hash
             //tmp_hash = SimpleHash(tmp_ip.c_str(), HASH_LEN);    // 09262020 Peixuan : simple hash
             //double ratio = 1/3;
             //tmp_hash = HASH_LEN*ratio*vir_node_num + HASH_LEN*ratio;    // 09262020 Peixuan : simple hash
@@ -264,7 +264,7 @@ void consistent_hash::add_real_node_assign(std::string ip, unsigned int vnode_nu
 
         this->virtual_node_map[hash_value].SetCacheIndex(real_node_sum - 1); // 10102020 Peixuan : Update the tmp_ip and real node index when assigning the vnode
 
-        //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), HASH_LEN);          //
+        //unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), tmp_ip.length());          //
 
     }
 
@@ -290,7 +290,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
         tmp_ip = ip + ":" + std::to_string(cur_port);
 
         //std::string max_str = "255.255.255.255:65535";
-        //unsigned int max_hash = MurMurHash(max_str.c_str(), HASH_LEN); // 10122020 Peixuan: getting a large hash value for the maximum hash value
+        //unsigned int max_hash = MurMurHash(max_str.c_str(), max_str.length()); // 10122020 Peixuan: getting a large hash value for the maximum hash value
         unsigned int max_hash = 4294967295;     //   ymj 20201013
 
         //std::cout << "[Max hash (Peixuan)]: \t" << max_hash << std::endl;
@@ -372,7 +372,7 @@ void consistent_hash::initial_virtual_node(unsigned int virtual_node_num) // 101
 
 // unsigned int consistent_hash::put(string data_id)
 // {
-//     unsigned int data_hash = my_getMurMurHash(data_id.c_str(), HASH_LEN);
+//     unsigned int data_hash = my_getMurMurHash(data_id.c_str(), data_id.length());
 //     unsigned int id = this->find_nearest_node(data_hash);
 //     unsigned int put_on_virnode_hash = this->sorted_node_hash_list[id];
 //     this->virtual_node_map[put_on_virnode_hash].data.insert(make_pair(data_hash, data_id));

@@ -131,8 +131,6 @@ void CHCache::printReqAndFileNum()
         cout << iter->first << " :[rnode] " << iter->second << endl;
         iter++;
     }*/
-
-
 }
 
 /*
