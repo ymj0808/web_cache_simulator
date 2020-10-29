@@ -29,9 +29,7 @@ bool LRUCache::lookup(SimpleRequest* req)
 {
     //update request number and file number  -- ymj    
     _requestNum += 1;
-    if (_uniqueFile.find(req->getId()) == _uniqueFile.end()) {
-        _uniqueFile.insert(std::pair<long, int>(req->getId(), 1));
-    }
+    _uniqueFile.insert(req->getId());
     // CacheObject: defined in cache_object.h 
     CacheObject obj(req);
     // _cacheMap defined in class LRUCache in lru_variants.h 

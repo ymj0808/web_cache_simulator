@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <list>
 #include <random>
+#include<set>
 #include "cache.h"
 #include "cache_object.h"
 #include "adaptsize_const.h" /* AdaptSize constants */
@@ -24,7 +25,7 @@ protected:
     // map to find objects in list
     lruCacheMapType _cacheMap;
     int _requestNum;                //request counter for a single cache -- ymj
-    std::map<long, int> _uniqueFile;
+    std::set<long long> _uniqueFile;
 
     virtual void hit(lruCacheMapType::const_iterator it, uint64_t size);
 
