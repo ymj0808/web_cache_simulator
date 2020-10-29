@@ -11,4 +11,4 @@ to_node    : 将落在 from_node中 vnode\*ratio 个虚节点上的 request的id
 ratio      : <br>
 <br>
 Example: ./trace_processor wikiaa wikiad wikiaa_processed 4 40 0 1 0.5<br><br>
-wikiaa中实节点0有40个虚节点，将落在其中的20（40\*0.5）个虚节点的request的id改为落在实节点1上，wikiad用来提供修改所以需要的request id<br>
+wikiaa中实节点0有40个虚节点，将落在其中的20（40\*0.5）个虚节点的request的id改为落在实节点1上，wikiad用来提供修改所需要的request id<br>
