@@ -92,6 +92,8 @@ void CHCache::init_mapper()
 
 }
 
+
+
 bool CHCache::request(SimpleRequest *req)
 {
     auto cache_index = chash.look_up(std::to_string(req->getId())).second;
