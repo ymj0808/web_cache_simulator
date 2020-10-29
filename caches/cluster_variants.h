@@ -27,6 +27,7 @@ class CHCache : public Cache
 {
 protected:
     int cache_number;
+    bool printMap;
     LRUCache *caches_list; // LRUCaches cluster
     //std::unordered_map<CacheObject, uint8_t> mapper; // map CacheObjec to LRUCache
     consistent_hash chash;

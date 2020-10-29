@@ -50,6 +50,11 @@ void CHCache::setPar(std::string parName, std::string parValue)
         const int param = stoull(parValue);
         virtual_node = param;
     }
+    else if (parName.compare("map") == 0)
+    {
+        const int map = stoull(parValue);
+        printMap = map;
+    }
     else
     {
         std::cerr << "unrecognized parameter: " << parName << std::endl;
@@ -71,7 +76,6 @@ void CHCache::init_mapper()
         ip_seg_3++;
         ip_seg_4++;
     }
-
     // 10262020 Peixuan debug printing vnode hash_value:
 
     /*chash.iter = chash.virtual_node_map.begin();
@@ -114,23 +118,27 @@ void CHCache::printReqAndFileNum()
     }
     cout << endl;
 
-    // 10262020 Peixuan: print file mapping 
+    if (printMap) {
+        // 10262020 Peixuan: print file mapping 
 
-    /*std::map<std::string, unsigned int>::iterator iter;
+        std::map<std::string, unsigned int>::iterator iter;
 
-    std::map<std::string, unsigned int> fileID_vnode_map = chash.fileID_vnode_map;
-    iter = fileID_vnode_map.begin();
-    while(iter != fileID_vnode_map.end()) {
-        cout << iter->first << " :[vnode] " << iter->second << endl;
-        iter++;
+        std::map<std::string, unsigned int> fileID_vnode_map = chash.fileID_vnode_map;
+        iter = fileID_vnode_map.begin();
+        while(iter != fileID_vnode_map.end()) {
+            cout << iter->first << " :[vnode] " << iter->second << endl;
+            iter++;
+        }
+
+        std::map<std::string, unsigned int> fileID_rnode_map = chash.fileID_rnode_map;
+        iter = fileID_rnode_map.begin();
+        while(iter != fileID_rnode_map.end()) {
+            cout << iter->first << " :[rnode] " << iter->second << endl;
+            iter++;
+        }
     }
 
-    std::map<std::string, unsigned int> fileID_rnode_map = chash.fileID_rnode_map;
-    iter = fileID_rnode_map.begin();
-    while(iter != fileID_rnode_map.end()) {
-        cout << iter->first << " :[rnode] " << iter->second << endl;
-        iter++;
-    }*/
+    
 }
 
 /*
