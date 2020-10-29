@@ -1,14 +1,14 @@
-->make
-->./trace_processed in_path, ref_path, out_path, rnode_num, vnode_num, from_node, to_node, ratio
-
-in_path    : ĞèÒª´¦ÀíµÄtrace
-ref_path   : ÓÃÀ´Ìá¹©request idµÄtrace£¨Í¨¹ıĞŞ¸Ärequest id£¬ÈÃ¸ÃÇëÇóÂäµ½ÆäËûvnodeÉÏ£©
-out_path   : ´¦ÀíºÃµÄtraceµØÖ·Ãû³Æ
-rnode_num  : Êµ½ÚµãÊı
-vnode_num  : Ã¿¸öÊµ½ÚµãµÄĞé½ÚµãÊı
-from_node  :  
-to_node    : ½«ÂäÔÚ from_nodeÖĞ vnode*ratio ¸öĞé½ÚµãÉÏµÄ requestµÄid ĞŞ¸ÄÎªÂäÔÚto_nodeÉÏ
-ratio      : 
-
-Example: ./trace_processor wikiaa wikiad wikiaa_processed 4 40 0 1 0.5
-wikiaaÖĞÊµ½Úµã0ÓĞ40¸öĞé½Úµã£¬½«ÂäÔÚÆäÖĞµÄ20£¨40*0.5£©¸öĞé½ÚµãµÄrequestµÄid¸ÄÎªÂäÔÚÊµ½Úµã1ÉÏ£¬wikiadÓÃÀ´Ìá¹©ĞŞ¸ÄËùÒÔĞèÒªµÄrequest id
+->make<br>
+->./trace_processed in_path, ref_path, out_path, rnode_num, vnode_num, from_node, to_node, ratio<br>
+<br>
+in_path    : éœ€è¦å¤„ç†çš„trace<br>
+ref_path   : ç”¨æ¥æä¾›request idçš„traceï¼ˆé€šè¿‡ä¿®æ”¹request idï¼Œè®©è¯¥è¯·æ±‚è½åˆ°å…¶ä»–vnodeä¸Šï¼‰<br>
+out_path   : å¤„ç†å¥½çš„traceåœ°å€åç§°<br>
+rnode_num  : å®èŠ‚ç‚¹æ•°<br>
+vnode_num  : æ¯ä¸ªå®èŠ‚ç‚¹çš„è™šèŠ‚ç‚¹æ•°<br>
+from_node  :  <br>
+to_node    : å°†è½åœ¨ from_nodeä¸­ vnode*ratio ä¸ªè™šèŠ‚ç‚¹ä¸Šçš„ requestçš„id ä¿®æ”¹ä¸ºè½åœ¨to_nodeä¸Š<br>
+ratio      : <br>
+<br>
+Example: ./trace_processor wikiaa wikiad wikiaa_processed 4 40 0 1 0.5<br><br>
+wikiaaä¸­å®èŠ‚ç‚¹0æœ‰40ä¸ªè™šèŠ‚ç‚¹ï¼Œå°†è½åœ¨å…¶ä¸­çš„20ï¼ˆ40*0.5ï¼‰ä¸ªè™šèŠ‚ç‚¹çš„requestçš„idæ”¹ä¸ºè½åœ¨å®èŠ‚ç‚¹1ä¸Šï¼Œwikiadç”¨æ¥æä¾›ä¿®æ”¹æ‰€ä»¥éœ€è¦çš„request id<br>
