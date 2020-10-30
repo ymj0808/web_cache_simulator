@@ -169,7 +169,7 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
 
     input.close();
 
-    /*this part works unwell to hit rate*/
+    /*get request id from original trace, but works unwell to hit rate*/
     /*  
     while (input >> time >> id >> size) {
         if (requestId_to_rnodeId[id] == from_rnode && requestId_to_vnodeId[id] < vnode_num * requestId_to_rnodeId[id] + move_num) {
@@ -180,15 +180,16 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
     }  
     */
 
-    vector<vector<long long>> tmp_rnode_request;
-    vector<vector<long long>> tmp_vnode_request;
+    /*get request id from ref_trace£¬ 2 options*/
+    vector<vector<long long>> ref_rnode_request;
+    vector<vector<long long>> ref_vnode_request;
     for (int i = 0; i < rnode_num; i++) {
         vector<long long> v;
-        tmp_rnode_request.push_back(v);
+        ref_rnode_request.push_back(v);
     }
     for (int i = 0; i < vnode_num * rnode_num; i++) {
         vector<long long> v;
-        tmp_vnode_request.push_back(v);
+        ref_vnode_request.push_back(v);
     }
     input.open(ref_path);
     while (input >> time >> id >> size) {
@@ -200,23 +201,36 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
             vnode_index = 0;
         }
         vnode node = hash_order_vnode_list[vnode_index];       
-        tmp_rnode_request[node.rnode_index].push_back(id);
-        tmp_vnode_request[node.vnode_id_unique].push_back(id);
+        ref_rnode_request[node.rnode_index].push_back(id);
+        ref_vnode_request[node.vnode_id_unique].push_back(id);
     }
-
     input.close();
 
     input.open(in_path);
     output.open(out_path);
     int move_num = (int)vnode_num * ratio;
+    /*2.get request id from rnode, don't care vnode*/
+   /* while (input >> time >> id >> size) {
+        if (requestId_to_rnodeId[id] == from_rnode && requestId_to_vnodeId[id] < vnode_num * requestId_to_rnodeId[id] + move_num) {
+            if(ref_rnode_request[to_rnode].size() > 0){
+                int pos = rand() % ref_rnode_request[to_rnode].size();
+                id = ref_rnode_request[to_rnode][pos];
+            }
+        }
+        output << time << " " << id << " " << size << endl;
+    }*/
+    /*2.get request id from vnode, vnode to vnode*/
     while (input >> time >> id >> size) {
         if (requestId_to_rnodeId[id] == from_rnode && requestId_to_vnodeId[id] < vnode_num * requestId_to_rnodeId[id] + move_num) {
-            int pos = rand() % tmp_rnode_request[to_rnode].size();
-            id = tmp_rnode_request[to_rnode][pos];
+            int orig_vId = requestId_to_vnodeId[id];
+            int tmp_vId = orig_vId + vnode_num * (to_rnode - from_rnode);
+            if (ref_vnode_request[tmp_vId].size() > 0) {
+                int pos = rand() % ref_vnode_request[tmp_vId].size();
+                id = ref_vnode_request[tmp_vId][pos];
+            }
         }
         output << time << " " << id << " " << size << endl;
     }
-
     input.close();
     output.close();
 }
