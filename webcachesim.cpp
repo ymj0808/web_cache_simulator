@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
         cout << cacheType << endl;
         while (infile >> t >> id >> size)
         {
-            size = 1;     // size control by Tianxing
+            //size = 1;     // size control by Tianxing
             reqs++;
             reqs_size += size;
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
         webcache->init_mapper();
         while (infile >> t >> id >> size)
         {
-            size = 1;     // size control by Tianxing
+            //size = 1;     // size control by Tianxing
             reqs++;
             reqs_size += size;
             req->reinit(id, size);
