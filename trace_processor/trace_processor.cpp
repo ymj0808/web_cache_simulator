@@ -144,12 +144,14 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
         vector<long long> v;
         vnode_request.push_back(v);
     }
+    int request_num = 0;
     
     ifstream input;    
     ofstream output;
     input.open(in_path);
     long long time, id, size;
     while (input >> time >> id >> size) {
+        request_num++;
         string request = to_string(id);
         unsigned request_hash = MurMurHash(request.c_str(), request.length());
         unsigned int vnode_index = find_nearest_node(request_hash, hash_order_vnode_list);
@@ -165,7 +167,7 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
     }
     for (int i = 0; i < rnode_num; i++) {
         cout << rnode_request[i].size() << endl;
-     }
+    }
 
     input.close();
 
@@ -209,8 +211,9 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
     input.open(in_path);
     output.open(out_path);
     int move_num = (int)vnode_num * ratio;
-    /*2.get request id from rnode, don't care vnode*/
-   /* while (input >> time >> id >> size) {
+    /*1.get request id from rnode, don't care vnode*/
+    /* 
+    while (input >> time >> id >> size) {
         if (requestId_to_rnodeId[id] == from_rnode && requestId_to_vnodeId[id] < vnode_num * requestId_to_rnodeId[id] + move_num) {
             if(ref_rnode_request[to_rnode].size() > 0){
                 int pos = rand() % ref_rnode_request[to_rnode].size();
@@ -218,7 +221,9 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
             }
         }
         output << time << " " << id << " " << size << endl;
-    }*/
+    }
+    */
+    
     /*2.get request id from vnode, vnode to vnode*/
     while (input >> time >> id >> size) {
         if (requestId_to_rnodeId[id] == from_rnode && requestId_to_vnodeId[id] < vnode_num * requestId_to_rnodeId[id] + move_num) {
@@ -231,6 +236,29 @@ void trace_process(string in_path, string ref_path, string out_path, int rnode_n
         }
         output << time << " " << id << " " << size << endl;
     }
+    /*  batch process  */
+    /* 
+    from_rnode = 0;
+    to_rnode = 1;
+    int batch_size = 50000;
+    int counter = 0;
+    while (input >> time >> id >> size) {
+        counter++;
+        if (counter % batch_size == 0) {
+            from_rnode = (from_rnode + 1) % rnode_num;
+            to_rnode = (to_rnode + 1) % rnode_num;
+        }
+        if (requestId_to_rnodeId[id] == from_rnode && requestId_to_vnodeId[id] < vnode_num * requestId_to_rnodeId[id] + move_num) {
+            int orig_vId = requestId_to_vnodeId[id];
+            int tmp_vId = orig_vId + vnode_num * (to_rnode - from_rnode);
+            if (ref_vnode_request[tmp_vId].size() > 0) {
+                int pos = rand() % ref_vnode_request[tmp_vId].size();
+                id = ref_vnode_request[tmp_vId][pos];
+            }
+        }
+        output << time << " " << id << " " << size << endl;
+    }
+    */
     input.close();
     output.close();
 }
