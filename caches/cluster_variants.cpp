@@ -523,6 +523,7 @@ void Shuffler::update()
     {
         std::cout << "Shift " << min_i << " to " << max_i << " fail!" << std::endl;
     }
+    std::cout << "Shift " << min_i << " to " << max_i << " successed?" << std::endl; // 11172020 Peixuan debug
     reset();
 }
 
