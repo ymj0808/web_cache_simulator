@@ -498,6 +498,8 @@ void Shuffler::update()
             if (cache_index_each_node[i + 1] == max_i)
             {
                 min2max.push_back(std::pair<int, unsigned int>(i, chash.sorted_node_hash_list[i + 1] - chash.sorted_node_hash_list[i]));
+                // This is the hash space gap between a vnode on min rnode and a adjunt vnode on max rnode
+                // Peixuan: What if there is no such node?
             }
         }
     }
@@ -506,17 +508,17 @@ void Shuffler::update()
     if (min2max.size() != 0)
     {
         sort(min2max.begin(), min2max.end(), cmp2); // find the bigest gap of min node to max node, shift this min node to max node
-        int moving_min_index = min2max[0].first;
+        int moving_min_index = min2max[0].first;    // Peixuan read: The vnode index on min node with largest hash gap
         //std::cout << min_rank << '\t' << max_rank << std::endl;
-        unsigned int mid = min2max[0].second * (1 - min_rank / max_rank) / 10;
-        mid += chash.sorted_node_hash_list[moving_min_index];
+        unsigned int mid = min2max[0].second * (1 - min_rank / max_rank) / 10; // Peixuan read: Find a suitable place to divide the hash space?
+        mid += chash.sorted_node_hash_list[moving_min_index];   // Peixuan read: Move the hash space of the vnode on min rnode by amount of mid
         //unsigned int mid = chash.sorted_node_hash_list[moving_min_index];
-        auto iter = chash.virtual_node_map.find(chash.sorted_node_hash_list[moving_min_index]);
+        auto iter = chash.virtual_node_map.find(chash.sorted_node_hash_list[moving_min_index]); // Peixuan read: find the hash space of the adjusted vnode
         if (iter == chash.virtual_node_map.end())
             std::cout << "fuck" << std::endl;
         (unsigned int &)iter->first = mid;
-        iter->second.hash_value = mid;
-        chash.sorted_node_hash_list[moving_min_index] = mid;
+        iter->second.hash_value = mid;  // Peixuan read: update vnode hash value
+        chash.sorted_node_hash_list[moving_min_index] = mid;    // Peixuan read: update vnode hash value
         //std::cout << "Shift " << min_i << " to " << max_i << " success!" << std::endl;
     }
     else
@@ -704,7 +706,7 @@ void ShufflerM::reset()
         last_access_on_each_virtual_node[vnode].clear();
     }
 
-    while (pointer != nullptr)
+    while (pointer != nullptr)  // Peixuan read: traverse the recording matrix to clean arr?
     {
         //delete[] pointer->arr;
         pointer->arr.clear();
@@ -720,7 +722,7 @@ void ShufflerM::update()
     {
         if (max_requests < request_count[i])
         {
-            max_requests = request_count[i];
+            max_requests = request_count[i];    // Peixuan read: find the rnode with highest request number
         }
     }
     for (int i = 0; i < cache_number; ++i)
@@ -731,7 +733,7 @@ void ShufflerM::update()
         //std::cout << miss_rate[i] << '\t';
         usage_ratio[i] = (double)request_count[i] / max_requests;
         //std::cout<<usage_ratio[i]<<'\t';
-        rank[i] = miss_rate[i] * alpha + usage_ratio[i] * (1 - alpha);
+        rank[i] = miss_rate[i] * alpha + usage_ratio[i] * (1 - alpha); // Peixuan read: get the rank by combining missing rate and usage ratio
         //std::cout << rank[i] << '*';
     }
     max_i = 0;
@@ -739,7 +741,7 @@ void ShufflerM::update()
     max_rank = rank[0];
     min_rank = rank[0];
 
-    for (int i = 1; i < cache_number; ++i)
+    for (int i = 1; i < cache_number; ++i) // Peixuan read: Find max and min rank rnode
     {
         if (rank[i] > max_rank)
         {
@@ -754,7 +756,7 @@ void ShufflerM::update()
     }
 
     SD_Max = 0;
-    target = vnode_index_for_each_real_node[max_i].end();
+    target = vnode_index_for_each_real_node[max_i].end(); // Peixuan read: last vode of rnode max_i?
 
     while (pointer != nullptr)
     {
