@@ -370,3 +370,39 @@ trace : /mnt/c/Users/28347/Documents/CDN/trace/cdn1_100m.tr
 cacheType : SFM	cache_size : 10000	paramSummary : 41400004010000
 reqs : 100000000	hits : 43719135	hit rate : 0.437191
 reqs size : 100000000	hit size : 43719135	hit size rate : 0.437191
+
+time duration : 64ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4405100001000
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 19130	hit size : 17392	hit size rate : 0.909148
+
+time duration : 153ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4405100001000true
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 10492	hit size : 9529	hit size rate : 0.908216
+
+time duration : 161ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	true	
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 10492	hit size : 9529	hit size rate : 0.908216
+
+time duration : 155ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	false	
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 10492	hit size : 9529	hit size rate : 0.908216
+
+time duration : 157ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	true	
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 19130	hit size : 17392	hit size rate : 0.909148
+
+time duration : 156ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	false	
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 10492	hit size : 9529	hit size rate : 0.908216
