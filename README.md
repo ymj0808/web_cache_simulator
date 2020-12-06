@@ -27,20 +27,20 @@ where
  - cacheSize: the cache capacity in bytes
  - cacheParams: optional cache parameters, can be used to tune cache policies (see below)
 
-### Request trace format
+### Request trace format (Change Attention)
 
-Request traces must be given in a space-separated format with three colums
-- time should be a long long int, but can be arbitrary (for future TTL feature, not currently in use)
+Request traces must be given in a space-separated format with **TWO** colums
+
 - id should be a long long int, used to uniquely identify objects
 - size should be a long long int, this is object's size in bytes
 
-| time |  id | size |
-| ---- | --- | ---- |
-|   1  |  1  |  120 |
-|   2  |  2  |   64 |
-|   3  |  1  |  120 |
-|   4  |  3  |  14  |
-|   4  |  1 |  120 |
+|  id | size |
+| --- | ---- |
+|  1  |  120 |
+|  2  |   64 |
+|  1  |  120 |
+|  3  |  14  |
+|  1 |  120 |
 
 Example trace in file "test.tr".
 
