@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
   ifstream infile;
   long long reqs = 0, hits = 0;
   long long reqs_size = 0, hits_size = 0;
-  long long t, id, size;
+  long long id, size;
   SimpleRequest *req = new SimpleRequest(0, 0);
 
   cerr << "running..." << endl;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
       cacheType.compare("SFM") && cacheType.compare("SFMF")) {
     cout << cacheType << endl;
     if (file_size) {  // real size, careful for the param cache size and threshold
-      while (infile >> t >> id >> size) {
+      while (infile >> id >> size) {
         reqs++;
         reqs_size += size;
         req->reinit(id, size);
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
         }
       }
     } else {
-      while (infile >> t >> id >> size) {
+      while (infile >> id >> size) {
         size = 1;     // size control by Tianxing
         reqs++;
         reqs_size += size;
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
     cout << cacheType << endl;
     webcache->init_mapper();
     if (file_size) {
-      while (infile >> t >> id >> size) {
+      while (infile >> id >> size) {
         reqs++;
         reqs_size += size;
         req->reinit(id, size);
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
         }
       }
     } else {
-      while (infile >> t >> id >> size) {
+      while (infile >> id >> size) {
         size = 1;     // size control by Tianxing
         reqs++;
         reqs_size += size;

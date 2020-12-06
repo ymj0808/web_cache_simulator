@@ -406,3 +406,9 @@ trace : test.tr
 cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	false	
 reqs : 10492	hits : 9529	hit rate : 0.908216
 reqs size : 10492	hit size : 9529	hit size rate : 0.908216
+
+time duration : 74ms
+trace : test.tr
+cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	false	
+reqs : 10492	hits : 9529	hit rate : 0.908216
+reqs size : 10492	hit size : 9529	hit size rate : 0.908216
