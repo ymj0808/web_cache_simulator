@@ -412,3 +412,111 @@ trace : test.tr
 cacheType : SFM	cache_size : 1000	paramSummary : 4	40	5	10000	1000	false	
 reqs : 10492	hits : 9529	hit rate : 0.908216
 reqs size : 10492	hit size : 9529	hit size rate : 0.908216
+
+time duration : 61ms
+trace : test.tr
+cacheType : SFM	cache_size : 100	paramSummary : 4	40	5	100	100	false	
+reqs : 10492	hits : 7796	hit rate : 0.743042
+reqs size : 10492	hit size : 7796	hit size rate : 0.743042
+
+time duration : 84ms
+trace : test.tr
+cacheType : SFM	cache_size : 100	paramSummary : 5	40	5	100	100	false	
+reqs : 10492	hits : 8208	hit rate : 0.78231
+reqs size : 10492	hit size : 8208	hit size rate : 0.78231
+
+time duration : 77ms
+trace : test.tr
+cacheType : SFM	cache_size : 100	paramSummary : 5	40	5	100	100	true	
+reqs : 10492	hits : 6943	hit rate : 0.661742
+reqs size : 19130	hit size : 12361	hit size rate : 0.646158
+
+time duration : 3ms
+trace : test.tr
+cacheType : LRU	cache_size : 1000	paramSummary : false	
+reqs : 10492	hits : 9532	hit rate : 0.908502
+reqs size : 10492	hit size : 9532	hit size rate : 0.908502
+
+time duration : 6ms
+trace : test.tr
+cacheType : LRU	cache_size : 1000	paramSummary : true	
+reqs : 10492	hits : 8495	hit rate : 0.809665
+reqs size : 19130	hit size : 15403	hit size rate : 0.805175
+
+time duration : 25238ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SF	cache_size : 50000	paramSummary : 4	40	5	50000	50000	false	
+reqs : 10000000	hits : 7902958	hit rate : 0.790296
+reqs size : 10000000	hit size : 7902958	hit size rate : 0.790296
+
+time duration : 192501ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 50000	paramSummary : 4	40	5	50000	50000	true	
+reqs : 10000000	hits : 126963	hit rate : 0.0126963
+reqs size : 364306344058	hit size : 408281275	hit size rate : 0.00112071
+
+time duration : 205698ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 50000	paramSummary : 4	40	5	50000	50000	false	
+reqs : 10000000	hits : 7887668	hit rate : 0.788767
+reqs size : 10000000	hit size : 7887668	hit size rate : 0.788767
+
+time duration : 208253ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 50000	paramSummary : 4	40	5	50000	10000	false	
+reqs : 10000000	hits : 7887668	hit rate : 0.788767
+reqs size : 10000000	hit size : 7887668	hit size rate : 0.788767
+
+time duration : 205888ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 50000	paramSummary : 4	40	5	50000	10	false	
+reqs : 10000000	hits : 7887668	hit rate : 0.788767
+reqs size : 10000000	hit size : 7887668	hit size rate : 0.788767
+
+time duration : 205934ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 50000	paramSummary : 4	40	5	50000	10000	false	
+reqs : 10000000	hits : 7887668	hit rate : 0.788767
+reqs size : 10000000	hit size : 7887668	hit size rate : 0.788767
+
+time duration : 226368ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	50000	false	
+reqs : 10000000	hits : 6087312	hit rate : 0.608731
+reqs size : 10000000	hit size : 6087312	hit size rate : 0.608731
+
+time duration : 253185ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	10000	false	
+reqs : 10000000	hits : 6087312	hit rate : 0.608731
+reqs size : 10000000	hit size : 6087312	hit size rate : 0.608731
+
+time duration : 224975ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	100000	false	
+reqs : 10000000	hits : 6087312	hit rate : 0.608731
+reqs size : 10000000	hit size : 6087312	hit size rate : 0.608731
+
+time duration : 251926ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	100	false	
+reqs : 10000000	hits : 6098220	hit rate : 0.609822
+reqs size : 10000000	hit size : 6098220	hit size rate : 0.609822
+
+time duration : 1993622ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	10000	false	
+reqs : 10000000	hits : 6097952	hit rate : 0.609795
+reqs size : 10000000	hit size : 6097952	hit size rate : 0.609795
+
+time duration : 1903157ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	1000	false	
+reqs : 10000000	hits : 6097952	hit rate : 0.609795
+reqs size : 10000000	hit size : 6097952	hit size rate : 0.609795
+
+time duration : 1907904ms
+trace : /mnt/c/Users/28347/Desktop/wiki
+cacheType : SFM	cache_size : 10000	paramSummary : 4	40	5	50000	20000	false	
+reqs : 10000000	hits : 6097952	hit rate : 0.609795
+reqs size : 10000000	hit size : 6097952	hit size rate : 0.609795

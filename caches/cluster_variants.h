@@ -190,6 +190,7 @@ protected:
       the unordered_map is <content_id, the last access postition of this content>
   */
   std::vector<std::unordered_map<uint64_t, uint32_t>> last_access_on_each_virtual_node;
+  std::vector<std::unordered_map<uint64_t, uint32_t>> last_access_on_each_real_node;
   /*
       each position is a unordered_map to record the counter stacks of its
      virtual node
@@ -201,6 +202,7 @@ protected:
   dequeue_node *pointer = nullptr;
 
   std::vector<std::map<uint32_t, uint32_t>> frag_arrs; // store arr of each vnode in set, <start, size>
+  std::vector<std::map<uint32_t, uint32_t>> frag_arrs_rnode;  // store arr of each rnode
   std::vector<int> cache_index_each_node;
   // std::vector<std::vector<int>> request_array; // cache_index in chash.sorted
   // and its contents row number vector

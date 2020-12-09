@@ -547,10 +547,13 @@ void ShufflerM::print_hash_space() {
 }
 
 void ShufflerM::init_mapper() {
-  chash.add_real_node("192.168.0.136", virtual_node);
-  chash.add_real_node("192.168.1.137", virtual_node);
-  chash.add_real_node("192.168.2.138", virtual_node);
-  chash.add_real_node("192.168.3.139", virtual_node);
+  for (int i = 0; i < cache_number; ++i) {
+    chash.add_real_node(std::to_string(i), virtual_node);
+  }
+  // chash.add_real_node("192.168.0.136", virtual_node);
+  // chash.add_real_node("192.168.1.137", virtual_node);
+  // chash.add_real_node("192.168.2.138", virtual_node);
+  // chash.add_real_node("192.168.3.139", virtual_node);
 
   request_count = new uint64_t[cache_number];
   hit_count = new uint64_t[cache_number];
@@ -573,6 +576,7 @@ void ShufflerM::init_mapper() {
   virtual_node_number = chash.sorted_node_hash_list.size();
 
   frag_arrs.resize(virtual_node_number, {{0, 0}});
+  frag_arrs_rnode.resize(cache_number, {{0, 0}});
 
   head = new dequeue_node(nullptr);
   pointer = head;
@@ -584,6 +588,7 @@ void ShufflerM::init_mapper() {
   pointer = head;
 
   last_access_on_each_virtual_node.resize(virtual_node_number, {});
+  last_access_on_each_real_node.resize(cache_number, {});
   for (int vnode = 0; vnode < virtual_node_number; ++vnode) {
     int cache_index =
         chash.virtual_node_map[chash.sorted_node_hash_list[vnode]].cache_index;
@@ -608,15 +613,20 @@ void ShufflerM::reset() {
   }
 
   for (int vnode = 0; vnode < virtual_node_number; ++vnode) {
-    for (uint32_t j = 0; j < window_size; j++) {
-      frag_arrs[vnode].clear();
-      frag_arrs[vnode][0] = 0;
-    }
+    frag_arrs[vnode].clear();
+    frag_arrs[vnode][0] = 0;
     last_access_on_each_virtual_node[vnode].clear();
+  }
+
+  for (int rnode = 0; rnode < cache_number; ++rnode) {
+    frag_arrs_rnode[rnode].clear();
+    frag_arrs_rnode[rnode][0] = 0;
+    last_access_on_each_real_node[rnode].clear();
   }
 
   while (pointer) { // clean arr
     pointer->arr.clear();
+    pointer->arr_rnode.clear();
     pointer = pointer->next;
   }
 
@@ -663,15 +673,17 @@ void ShufflerM::update() {
 
   SD_Max = 0;
   target = vnode_index_for_each_real_node[max_i].end(); // init target as NAN
-
+  pointer = tail;
   while (pointer != nullptr) {
     if (pointer->real_node == max_i || pointer->real_node == min_i) {
       pointer->c = pointer->c_value(pointer->last_access);
+      pointer->c_vnode = pointer->c_value_vnode(pointer->last_access);
       if (pointer->c < threshold)
         SD_Max++;
     }
     pointer = pointer->prev;
   }
+  std::cout << "SD_MAX : " << SD_Max << "  ";
   pointer = tail;
   for (auto iter = vnode_index_for_each_real_node[max_i].begin();
        iter != vnode_index_for_each_real_node[max_i].end();
@@ -682,42 +694,27 @@ void ShufflerM::update() {
       if (pointer->real_node == min_i) {
         if (pointer->last_access != UINT32_MAX)
           queue_of_min.push(pointer);
-        while (!queue_of_c_i.empty()) {
+        while (!queue_of_c_i.empty()) { // all c_i after pointer == min_i
           dequeue_node *col = queue_of_c_i.front();
-          if (position >= col->last_access &&
-              col->c + pointer->c_value(col->last_access) < threshold) {
+          if (col->c_vnode + pointer->c_value(col->last_access) < threshold) {
             SD++;
-          } else {
-            if (col->c < threshold) {
-              SD++;
-            }
           }
           queue_of_c_i.pop();
         }
       } else if (pointer->virtual_node == *iter) {
         if (pointer->last_access != UINT32_MAX)
           queue_of_c_i.push(pointer);
-        while (!queue_of_max.empty()) {
+        while (!queue_of_max.empty()) {  // all max after iter == c_i
           dequeue_node *col = queue_of_max.front();
-          if (position >= col->last_access &&
-              col->c - pointer->c_value(col->last_access) < threshold) {
+          if (col->c - pointer->c_value_vnode(col->last_access) < threshold) {
             SD++;
-          } else {
-            if (col->c < threshold) {
-              SD++;
-            }
           }
           queue_of_max.pop();
         }
-        while (!queue_of_min.empty()) {
+        while (!queue_of_min.empty()) {  // all min after iter == c_i
           dequeue_node *col = queue_of_min.front();
-          if (position >= col->last_access &&
-              col->c + pointer->c_value(col->last_access) < threshold) {
+          if (col->c + pointer->c_value_vnode(col->last_access) < threshold) {
             SD++;
-          } else {
-            if (col->c < threshold) {
-              SD++;
-            }
           }
           queue_of_min.pop();
         }
@@ -729,7 +726,7 @@ void ShufflerM::update() {
       position--;
     }
     while (!queue_of_c_i.empty()) {
-      if (queue_of_c_i.front()->c < threshold)
+      if (queue_of_c_i.front()->c_vnode < threshold)
         SD++;
       queue_of_c_i.pop();
     }
@@ -750,8 +747,10 @@ void ShufflerM::update() {
     pointer = tail;
     position = window_size;
   }
+  std::cout << "SD_MAX : " << SD_Max << std::endl;
   // change the cache_index attribute of virtual node
   if (target != vnode_index_for_each_real_node[max_i].end()) {
+    std::cout << "Change " << max_i << " to " << min_i << std::endl;
     chash.virtual_node_map[chash.sorted_node_hash_list[*target]].cache_index =
         min_i;
     // change the vnode_index_for_each_real_node, put the virtual node from
@@ -766,28 +765,51 @@ bool ShufflerM::request(SimpleRequest *req) {
   look_up_res = chash.look_up(
       std::to_string(req->getId())); // <virtual node index, real node index>
   request_count[look_up_res.second]++;
+  auto size = req->getSize();
 
   iter_in_last_access =
       last_access_on_each_virtual_node[look_up_res.first].find(
           req->getId());                               // <ID, last access>
   // the fragment array (stored in std::set) of this vnode
   auto &frag_arr_vnode = frag_arrs[look_up_res.first]; 
-
   if (iter_in_last_access !=
       last_access_on_each_virtual_node[look_up_res.first].end()) {
-    // accessed before;
-    auto start = frag_arr_vnode.find(iter_in_last_access->second + 1);
-    while (++start != frag_arr_vnode.end())
-      start->second += req->getSize();
-    frag_arr_vnode.erase(iter_in_last_access->second + 1);             // fragment merging, see the paper
+    // accessed before
+    auto start = frag_arr_vnode.find(iter_in_last_access->second);
+    auto next = ++start;  // the fragment need to be erased
+    while (++start != frag_arr_vnode.end()) // next never be the end()
+      start->second += size;  // those first time see this content
+    frag_arr_vnode.erase(next);  // fragment merging, see the paper  
+    pointer->last_access = iter_in_last_access->second;
     iter_in_last_access->second = position;
-    pointer->last_access = position;
   } else {
+    for (auto& ele : frag_arr_vnode)
+      ele.second += size;
     last_access_on_each_virtual_node[look_up_res.first][req->getId()] = position;
     pointer->last_access = UINT32_MAX;
   }
   frag_arr_vnode[position + 1] = 0;  // the position for the first 0
-  pointer->copy_arr_from_vnode(frag_arr_vnode, look_up_res);
+  
+  iter_in_last_access =
+      last_access_on_each_real_node[look_up_res.second].find(
+          req->getId());
+  // the fragment array (stored in std::set) of this rnode
+  auto &frag_arr_rnode = frag_arrs_rnode[look_up_res.second];
+  if (iter_in_last_access != last_access_on_each_real_node[look_up_res.second].end()) {
+    auto start = frag_arr_rnode.find(iter_in_last_access->second);
+    auto next = ++start;
+    while (++start != frag_arr_rnode.end()) // next never be the end()
+      start->second += size;
+    frag_arr_rnode.erase(next); 
+    iter_in_last_access->second = position;
+  } else {
+    for (auto& ele : frag_arr_rnode)
+      ele.second += size;
+    last_access_on_each_real_node[look_up_res.second][req->getId()] = position;
+  }
+  frag_arr_rnode[position + 1] = 0;
+
+  pointer->copy_arr(frag_arr_vnode, frag_arr_rnode,look_up_res);
   pointer = pointer->next;
   position++;
   flag = caches_list[look_up_res.second].lookup(req);

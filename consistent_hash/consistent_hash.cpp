@@ -60,7 +60,7 @@ consistent_hash::look_up_simple(const std::string &content) {
   auto virtual_node_index = find_nearest_node_simple(hash_position);
   virtual_node_index++;
   if (virtual_node_index >=
-      this->sorted_node_hash_list.size()) { // cross the zero
+      sorted_node_hash_list.size()) { // cross the zero
     virtual_node_index = 0;
   }
   return std::pair<unsigned int, unsigned int>(
@@ -73,18 +73,18 @@ unsigned int consistent_hash::find_nearest_node_simple(
     unsigned int
         hash_value) { // find the nearest virtual node for given hash position
   int low = 0;
-  int high = this->sorted_node_hash_list.size() - 1;
+  int high = sorted_node_hash_list.size() - 1;
   int mid;
-  if (hash_value > this->sorted_node_hash_list[high]) {
+  if (hash_value > sorted_node_hash_list[high]) {
     return 0;
   }
   while (low < high) {
     mid = (low + high) / 2;
-    if (this->sorted_node_hash_list[mid] == hash_value) {
+    if (sorted_node_hash_list[mid] == hash_value) {
       return mid;
-    } else if (this->sorted_node_hash_list[mid] > hash_value) {
+    } else if (sorted_node_hash_list[mid] > hash_value) {
       high = mid;
-    } else { // this->sorted_node_hash_list[mid]<data_hash
+    } else { // sorted_node_hash_list[mid]<data_hash
       low = mid + 1;
     }
   }
@@ -92,32 +92,32 @@ unsigned int consistent_hash::find_nearest_node_simple(
 }
 
 consistent_hash::consistent_hash() {
-  this->real_node_sum = 0;
-  this->virtual_node_sum = 0;
+  real_node_sum = 0;
+  virtual_node_sum = 0;
 }
 
 consistent_hash::~consistent_hash() {
-  this->virtual_node_map.clear();
-  this->real_node_map.clear();
-  this->sorted_node_hash_list.clear();
+  virtual_node_map.clear();
+  real_node_map.clear();
+  sorted_node_hash_list.clear();
 }
 
 unsigned int consistent_hash::find_nearest_node(
     unsigned int
         hash_value) { // find the nearest virtual node for given hash position
   int low = 0;
-  int high = this->sorted_node_hash_list.size() - 1;
+  int high = sorted_node_hash_list.size() - 1;
   int mid;
-  if (hash_value > this->sorted_node_hash_list[high]) {
+  if (hash_value > sorted_node_hash_list[high]) {
     return 0;
   }
   while (low < high) {
     mid = (low + high) / 2;
-    if (this->sorted_node_hash_list[mid] == hash_value) {
+    if (sorted_node_hash_list[mid] == hash_value) {
       return mid;
-    } else if (this->sorted_node_hash_list[mid] > hash_value) {
+    } else if (sorted_node_hash_list[mid] > hash_value) {
       high = mid;
-    } else { // this->sorted_node_hash_list[mid]<data_hash
+    } else { // sorted_node_hash_list[mid]<data_hash
       low = mid + 1;
     }
   }
@@ -131,33 +131,34 @@ consistent_hash::look_up(const std::string &content) {
   auto virtual_node_index = find_nearest_node(hash_position);
   virtual_node_index++;
   if (virtual_node_index >=
-      this->sorted_node_hash_list.size()) { // cross the zero
+      sorted_node_hash_list.size()) { // cross the zero
     virtual_node_index = 0;
   }
 
   // Peixuan 10262020: File : vnode and rnode map:
+  
   fileID_vnode_map[content] = virtual_node_index;
   fileID_rnode_map[content] =
       virtual_node_map.find(sorted_node_hash_list[virtual_node_index])
           ->second.cache_index;
 
+
   return std::pair<unsigned int, unsigned int>(
       virtual_node_index,
-      virtual_node_map.find(sorted_node_hash_list[virtual_node_index])
-          ->second.cache_index);
+      virtual_node_map[sorted_node_hash_list[virtual_node_index]].cache_index);
 }
 
 void consistent_hash::add_real_node(std::string ip,
                                     unsigned int virtual_node_num) {
   std::cout << "[add_real_node]\t" << ip << std::endl;
   real_node *node;
-  if (this->real_node_map.find(ip) !=
-      this->real_node_map.end()) { // this real node has added before
+  if (real_node_map.find(ip) !=
+      real_node_map.end()) { // this real node has added before
     node = &real_node_map[ip];
   } else {
     real_node new_node = real_node(ip);
     node = &new_node;
-    this->real_node_sum++;
+    real_node_sum++;
   }
   int cur_port = node->cur_max_port;
   unsigned int vir_node_num = 0;
@@ -174,30 +175,30 @@ void consistent_hash::add_real_node(std::string ip,
       // double ratio = 1/3;
       // tmp_hash = HASH_LEN*ratio*vir_node_num + HASH_LEN*ratio;    // 09262020
       // Peixuan : simple hash
-    } while (this->virtual_node_map.find(tmp_hash) !=
-             this->virtual_node_map.end());
+    } while (virtual_node_map.find(tmp_hash) !=
+             virtual_node_map.end());
     vir_node_num++;
-    this->virtual_node_map[tmp_hash] =
+    virtual_node_map[tmp_hash] =
         virtual_node(tmp_ip, tmp_hash, real_node_sum - 1);
-    this->sorted_node_hash_list.push_back(tmp_hash);
-    sort(this->sorted_node_hash_list.begin(),
-         this->sorted_node_hash_list.end());
-    unsigned int id = this->find_nearest_node(tmp_hash);
+    sorted_node_hash_list.push_back(tmp_hash);
+    sort(sorted_node_hash_list.begin(),
+         sorted_node_hash_list.end());
+    unsigned int id = find_nearest_node(tmp_hash);
     unsigned int next_id = id + 1;
-    if (next_id >= this->sorted_node_hash_list.size()) { // cross the zero
+    if (next_id >= sorted_node_hash_list.size()) { // cross the zero
       next_id = 0;
     }
     // below is data immigration, here only provide look_up service
-    // unsigned int next_hash = this->sorted_node_hash_list[next_id];
+    // unsigned int next_hash = sorted_node_hash_list[next_id];
     // std::vector<unsigned int> tobe_deleted;
     // std::map<unsigned int, std::string> *tobe_robbed =
-    // &(this->virtual_node_map[next_hash].data);
+    // &(virtual_node_map[next_hash].data);
     // for (auto data = tobe_robbed->begin(); data != tobe_robbed->end();
     // data++)
     // {
     //     if (data->first < tmp_hash)
     //     {
-    //         this->virtual_node_map[tmp_hash].data[data->first] =
+    //         virtual_node_map[tmp_hash].data[data->first] =
     //         data->second;
     //         tobe_deleted.push_back(data->first);
     //     }
@@ -206,19 +207,19 @@ void consistent_hash::add_real_node(std::string ip,
     // {
     //     tobe_robbed->erase(deleted);
     //     cout << "[move data]\t" << deleted << "\tfrom node:\t" <<
-    //     this->virtual_node_map[next_hash].ip << "("
+    //     virtual_node_map[next_hash].ip << "("
     //          << next_hash << ")"
     //          << "\tto\t"
-    //          << this->virtual_node_map[tmp_hash].ip << "(" << tmp_hash << ")"
+    //          << virtual_node_map[tmp_hash].ip << "(" << tmp_hash << ")"
     //          << endl;
     // }
     // node->virtual_node_hash_list.push_back(tmp_hash);
   }
   node->cur_max_port = cur_port;
   node->virtual_node_num += virtual_node_num;
-  this->real_node_map[ip] = *node;
+  real_node_map[ip] = *node;
 
-  this->virtual_node_sum += virtual_node_num;
+  virtual_node_sum += virtual_node_num;
   std::cout << "[add_real_node finished]\t" << ip << std::endl << std::endl;
 }
 
@@ -228,13 +229,13 @@ void consistent_hash::add_real_node_assign(
 {
   std::cout << "[add_real_node_assign]\t" << ip << std::endl;
   real_node *node;
-  if (this->real_node_map.find(ip) !=
-      this->real_node_map.end()) { // this real node has added before
+  if (real_node_map.find(ip) !=
+      real_node_map.end()) { // this real node has added before
     node = &real_node_map[ip];
   } else {
     real_node new_node = real_node(ip);
     node = &new_node;
-    this->real_node_sum++;
+    real_node_sum++;
   }
 
   for (unsigned int assigned_vnode = 0; assigned_vnode < vnode_num_to_assign;
@@ -247,28 +248,28 @@ void consistent_hash::add_real_node_assign(
     // // 10122020 Peixuan vnode debug
 
     unsigned int hash_value =
-        this->uid_map_hash_value[starting_id + assigned_vnode];
+        uid_map_hash_value[starting_id + assigned_vnode];
 
-    // std::cout << "[UID = ]\t" << this->virtual_node_map[hash_value].uid <<
+    // std::cout << "[UID = ]\t" << virtual_node_map[hash_value].uid <<
     // std::endl; // 10122020 Peixuan vnode debug
 
     // std::cout << "[Hash_Value = ]\t" <<
-    // this->virtual_node_map[hash_value].hash_value << std::endl; // 10122020
+    // virtual_node_map[hash_value].hash_value << std::endl; // 10122020
     // Peixuan vnode debug
 
-    this->virtual_node_map[hash_value].SetIP(tmp_ip); // 10102020 Peixuan :
+    virtual_node_map[hash_value].SetIP(tmp_ip); // 10102020 Peixuan :
                                                       // Update the tmp_ip and
                                                       // real node index when
                                                       // assigning the vnode
 
-    this->virtual_node_map[hash_value].SetCacheIndex(
+    virtual_node_map[hash_value].SetCacheIndex(
         real_node_sum - 1); // 10102020 Peixuan : Update the tmp_ip and real
                             // node index when assigning the vnode
 
     // unsigned int tmp_hash = MurMurHash(tmp_ip.c_str(), tmp_ip.length()); //
   }
 
-  this->real_node_map[ip] = *node;
+  real_node_map[ip] = *node;
 
   std::cout << "[add_real_node finished]\t" << ip << std::endl << std::endl;
 }
@@ -320,25 +321,25 @@ void consistent_hash::initial_virtual_node(
     new_vnode.SetUid(vir_node_num);
     new_vnode.SetHashValue(tmp_hash);
 
-    this->virtual_node_map[tmp_hash] =
+    virtual_node_map[tmp_hash] =
         new_vnode; // ****************��������ֻ�������һ��vnode��ӳ���ϵ***********************
                    // ymj 20201012
-    this->uid_map_hash_value[vir_node_num] = tmp_hash;
+    uid_map_hash_value[vir_node_num] = tmp_hash;
 
-    this->sorted_node_hash_list.push_back(tmp_hash);
+    sorted_node_hash_list.push_back(tmp_hash);
 
-    sort(this->sorted_node_hash_list.begin(),
-         this->sorted_node_hash_list.end());
+    sort(sorted_node_hash_list.begin(),
+         sorted_node_hash_list.end());
 
-    unsigned int id = this->find_nearest_node(tmp_hash);
+    unsigned int id = find_nearest_node(tmp_hash);
 
     unsigned int next_id = id + 1;
 
-    if (next_id >= this->sorted_node_hash_list.size()) { // cross the zero
+    if (next_id >= sorted_node_hash_list.size()) { // cross the zero
       next_id = 0;
     }
   }
-  this->virtual_node_sum = virtual_node_num; // ymj 20201012
+  virtual_node_sum = virtual_node_num; // ymj 20201012
 }
 
 // void consistent_hash::print_real_node(std::string ip)
@@ -346,15 +347,15 @@ void consistent_hash::initial_virtual_node(
 //     std::cout << "------------consistent_hash.print_real_node------------" <<
 //     std::endl;
 //     std::cout << "real_node ip:" << ip << "\tvirtual_node_num=" <<
-//     this->real_node_map[ip].virtual_node_num << std::endl;
-//     for (auto tmp : this->real_node_map[ip].virtual_node_hash_list)
+//     real_node_map[ip].virtual_node_num << std::endl;
+//     for (auto tmp : real_node_map[ip].virtual_node_hash_list)
 //     {
-//         if (this->virtual_node_map[tmp].data.size() > 0)
+//         if (virtual_node_map[tmp].data.size() > 0)
 //         {
-//             cout << "virtual node:\t" << this->virtual_node_map[tmp].ip <<
+//             cout << "virtual node:\t" << virtual_node_map[tmp].ip <<
 //             "(" << tmp << ")"
 //                  << "\thas data:";
-//             for (auto data : this->virtual_node_map[tmp].data)
+//             for (auto data : virtual_node_map[tmp].data)
 //             {
 //                 cout << "(" << data.second << "," << data.first << ")\t";
 //             }
@@ -368,13 +369,13 @@ void consistent_hash::initial_virtual_node(
 // {
 //     cout << endl
 //          << "------------consistent_hash.print()------------" << endl;
-//     cout << "real_node_sum:\t" << this->real_node_sum <<
-//     "\tvirtual_node_sum:\t" << this->virtual_node_sum << endl;
+//     cout << "real_node_sum:\t" << real_node_sum <<
+//     "\tvirtual_node_sum:\t" << virtual_node_sum << endl;
 //     cout << endl;
-//     for (auto tmp = this->real_node_map.begin(); tmp !=
-//     this->real_node_map.end(); tmp++)
+//     for (auto tmp = real_node_map.begin(); tmp !=
+//     real_node_map.end(); tmp++)
 //     {
-//         this->print_real_node(tmp->first);
+//         print_real_node(tmp->first);
 //     }
 // }
 
@@ -382,13 +383,13 @@ void consistent_hash::initial_virtual_node(
 // {
 //     unsigned int data_hash = my_getMurMurHash(data_id.c_str(),
 //     data_id.length());
-//     unsigned int id = this->find_nearest_node(data_hash);
-//     unsigned int put_on_virnode_hash = this->sorted_node_hash_list[id];
-//     this->virtual_node_map[put_on_virnode_hash].data.insert(make_pair(data_hash,
+//     unsigned int id = find_nearest_node(data_hash);
+//     unsigned int put_on_virnode_hash = sorted_node_hash_list[id];
+//     virtual_node_map[put_on_virnode_hash].data.insert(make_pair(data_hash,
 //     data_id));
 //     cout << "data:\t" << data_id << "(" << data_hash << ")\twas put on
 //     virtual node:"
-//          << this->virtual_node_map[put_on_virnode_hash].ip << "(" <<
+//          << virtual_node_map[put_on_virnode_hash].ip << "(" <<
 //          put_on_virnode_hash << ")"
 //          << endl;
 //     return 0;
@@ -398,7 +399,7 @@ void consistent_hash::initial_virtual_node(
 // {
 //     std::cout << "[drop_real_node]\t" << ip << std::endl;
 //     std::vector<unsigned int> *virtual_hash_list_p =
-//     &this->real_node_map[ip].virtual_node_hash_list;
+//     &real_node_map[ip].virtual_node_hash_list;
 //     sort(virtual_hash_list_p->begin(), virtual_hash_list_p->end());
 //     unsigned int next_id;
 //     unsigned int next_hash;
@@ -409,51 +410,51 @@ void consistent_hash::initial_virtual_node(
 //     {
 //         cur_hash = (*virtual_hash_list_p)[i];
 //         tobe_delete.push_back(cur_hash);
-//         if (this->virtual_node_map[cur_hash].data.size() > 0)
+//         if (virtual_node_map[cur_hash].data.size() > 0)
 //         {
-//             cur_id = this->find_nearest_node(cur_hash);
+//             cur_id = find_nearest_node(cur_hash);
 //             next_id = cur_id;
 //             std::string next_realnode_ip;
 //             do
 //             {
 //                 next_id++;
-//                 if (next_id >= this->sorted_node_hash_list.size())
+//                 if (next_id >= sorted_node_hash_list.size())
 //                 {
 //                     next_id = 0;
 //                 }
-//                 next_hash = this->sorted_node_hash_list[next_id];
-//                 next_realnode_ip = this->virtual_node_map[next_hash].ip;
+//                 next_hash = sorted_node_hash_list[next_id];
+//                 next_realnode_ip = virtual_node_map[next_hash].ip;
 //             } while (next_realnode_ip.find(ip) != -1);
 //             std::map<unsigned int, std::string> *moveto =
-//             &(this->virtual_node_map[next_hash].data);
-//             for (auto &data : this->virtual_node_map[cur_hash].data)
+//             &(virtual_node_map[next_hash].data);
+//             for (auto &data : virtual_node_map[cur_hash].data)
 //             {
 //                 (*moveto)[data.first] = data.second;
 //                 std::cout << "[move data]\t" << data.second << "\tfrom
-//                 node:\t" << this->virtual_node_map[cur_hash].ip << "("
+//                 node:\t" << virtual_node_map[cur_hash].ip << "("
 //                      << cur_hash << ")"
 //                      << "\tto\t"
-//                      << this->virtual_node_map[next_hash].ip << "(" <<
+//                      << virtual_node_map[next_hash].ip << "(" <<
 //                      next_hash << ")" << std::endl;
 //             }
 //         }
 //     }
 //     for (auto hash : tobe_delete)
 //     {
-//         this->virtual_node_map.erase(cur_hash);
-//         this->virtual_node_sum--;
-//         auto iter = find(this->sorted_node_hash_list.begin(),
-//                          this->sorted_node_hash_list.end(), hash);
-//         if (iter != this->sorted_node_hash_list.end())
+//         virtual_node_map.erase(cur_hash);
+//         virtual_node_sum--;
+//         auto iter = find(sorted_node_hash_list.begin(),
+//                          sorted_node_hash_list.end(), hash);
+//         if (iter != sorted_node_hash_list.end())
 //         {
-//             this->sorted_node_hash_list.erase(iter);
+//             sorted_node_hash_list.erase(iter);
 //         }
 //     }
-//     sort(this->sorted_node_hash_list.begin(),
-//     this->sorted_node_hash_list.end());
-//     this->real_node_map[ip].virtual_node_hash_list.clear();
-//     this->real_node_map.erase(ip);
-//     this->real_node_sum--;
+//     sort(sorted_node_hash_list.begin(),
+//     sorted_node_hash_list.end());
+//     real_node_map[ip].virtual_node_hash_list.clear();
+//     real_node_map.erase(ip);
+//     real_node_sum--;
 //     std::cout << "[drop_real_node finished]\t" << ip << std::endl
 //          << std::endl;
 // }

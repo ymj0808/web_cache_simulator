@@ -93,10 +93,8 @@ int main(int argc, char *argv[]) {
           webcache->admit(req);
         }
       }
-    }
-    
-  } else // cluster variants
-  {
+    }  
+  } else { // cluster variants
     cout << cacheType << endl;
     webcache->init_mapper();
     if (file_size) {
@@ -108,9 +106,9 @@ int main(int argc, char *argv[]) {
           hits++;
           hits_size += size;
         }
-        if (reqs % 100000 == 0) {
-          webcache->print_hash_space();
-        }
+        // if (reqs % 100000 == 0) {
+        //   webcache->print_hash_space();
+        // }
       }
     } else {
       while (infile >> id >> size) {
@@ -122,9 +120,9 @@ int main(int argc, char *argv[]) {
           hits++;
           hits_size += size;
         }
-        if (reqs % 100000 == 0) {
-          webcache->print_hash_space();
-        }
+        // if (reqs % 100000 == 0) {
+        //   webcache->print_hash_space();
+        // }
       }
     }
     // webcache->print_hash_space();
