@@ -673,15 +673,34 @@ void ShufflerM::update() {
 
   SD_Max = 0;
   target = vnode_index_for_each_real_node[max_i].end(); // init target as NAN
-  pointer = tail;
+  pointer = head;
+  position = 0;
   while (pointer != nullptr) {
     if (pointer->real_node == max_i || pointer->real_node == min_i) {
-      pointer->c = pointer->c_value(pointer->last_access);
-      pointer->c_vnode = pointer->c_value_vnode(pointer->last_access);
-      if (pointer->c < threshold)
-        SD_Max++;
+      // the fragment array (stored in std::set) of this rnode
+      auto &frag_arr_rnode = frag_arrs_rnode[pointer->real_node];
+      auto size = pointer->content_size;
+      if (pointer->last_access != UINT32_MAX) {
+        auto start = frag_arr_rnode.find(pointer->last_access);
+        auto next = ++start;
+        while (++start != frag_arr_rnode.end()) // next never be the end()
+          start->second += size;
+        frag_arr_rnode.erase(next); 
+      } else {
+        for (auto& ele : frag_arr_rnode)
+          ele.second += size;
+      }
+      frag_arr_rnode[position + 1] = 0;
+      pointer->copy_arr_rnode(frag_arr_rnode);
+      if (pointer->last_access != UINT32_MAX) {
+        pointer->c = pointer->c_value(pointer->last_access);
+        pointer->c_vnode = pointer->c_value_vnode(pointer->last_access);
+        if (pointer->c < threshold)
+          SD_Max++;
+      }
     }
-    pointer = pointer->prev;
+    pointer = pointer->next;
+    ++position;
   }
   std::cout << "SD_MAX : " << SD_Max << "  ";
   pointer = tail;
@@ -689,7 +708,6 @@ void ShufflerM::update() {
        iter != vnode_index_for_each_real_node[max_i].end();
        iter++) { // try to give vnode from CMax to CMin
     int SD = 0;
-    position--;
     while (pointer != nullptr) {
       if (pointer->real_node == min_i) {
         if (pointer->last_access != UINT32_MAX)
@@ -723,7 +741,6 @@ void ShufflerM::update() {
         queue_of_max.push(pointer);
       }
       pointer = pointer->prev;
-      position--;
     }
     while (!queue_of_c_i.empty()) {
       if (queue_of_c_i.front()->c_vnode < threshold)
@@ -745,7 +762,6 @@ void ShufflerM::update() {
       target = iter;
     }
     pointer = tail;
-    position = window_size;
   }
   std::cout << "SD_MAX : " << SD_Max << std::endl;
   // change the cache_index attribute of virtual node
@@ -790,27 +806,11 @@ bool ShufflerM::request(SimpleRequest *req) {
   }
   frag_arr_vnode[position + 1] = 0;  // the position for the first 0
   
-  iter_in_last_access =
-      last_access_on_each_real_node[look_up_res.second].find(
-          req->getId());
-  // the fragment array (stored in std::set) of this rnode
-  auto &frag_arr_rnode = frag_arrs_rnode[look_up_res.second];
-  if (iter_in_last_access != last_access_on_each_real_node[look_up_res.second].end()) {
-    auto start = frag_arr_rnode.find(iter_in_last_access->second);
-    auto next = ++start;
-    while (++start != frag_arr_rnode.end()) // next never be the end()
-      start->second += size;
-    frag_arr_rnode.erase(next); 
-    iter_in_last_access->second = position;
-  } else {
-    for (auto& ele : frag_arr_rnode)
-      ele.second += size;
-    last_access_on_each_real_node[look_up_res.second][req->getId()] = position;
-  }
-  frag_arr_rnode[position + 1] = 0;
-
-  pointer->copy_arr(frag_arr_vnode, frag_arr_rnode,look_up_res);
+  pointer->copy_arr(frag_arr_vnode, look_up_res, size);
+  //pointer->copy_arr(frag_arr_vnode, frag_arr_rnode,look_up_res);
+  pointer->copy_arr_rnode(frag_arrs_rnode[look_up_res.second]); // even though this do nothing, delete this cause bug
   pointer = pointer->next;
+  //std::cout << position << ",";
   position++;
   flag = caches_list[look_up_res.second].lookup(req);
   if (!flag) {

@@ -4,13 +4,18 @@
 #include <map>
 #include <stdint.h>
 #include <vector>
+#include <iostream>
 
 class dequeue_node {
 public:
   dequeue_node(dequeue_node *previous);
   void copy_arr(std::map<uint32_t, uint32_t> &frag_arr_vnode,
-                std::map<uint32_t, uint32_t> &frag_arr_rnode,
-                std::pair<unsigned int, unsigned int> &look_up_res);
+                std::pair<unsigned int, unsigned int> &look_up_res, uint32_t content_s);
+  void copy_arr(
+    std::map<uint32_t, uint32_t> &frag_arr_vnode,
+    std::map<uint32_t, uint32_t> &frag_arr_rnode,
+    std::pair<unsigned int, unsigned int> &look_up_res);
+  void copy_arr_rnode(std::map<uint32_t, uint32_t> &frag_arr_rnode);
 
   /*
     for arr, only record the start index of each increment fragment (see the
@@ -21,6 +26,7 @@ public:
   */
   std::vector<std::pair<uint32_t, uint32_t>> arr; // request array of this vnode
   std::vector<std::pair<uint32_t, uint32_t>> arr_rnode; // request array of this vnode
+  uint32_t content_size;
   uint32_t size;
   uint32_t size_rnode;
   uint32_t last_access;
