@@ -5,13 +5,9 @@
 using namespace std;
 
 void trace_clean(string in_path, string out_path, int threshold) {
-	if (threshold < 1) {
-		cout << "threshold需要大于0" << endl;
-		return;
-	}
 	ifstream input(in_path, ios::in);
 	ofstream output(out_path, ios::out);
-	map<long long, int> counter;
+	map<long long, pair<int, int>> counter; // id, <count, size>
 	int time, id, size;
 	int before_num = 0;
 	int after_num = 0;
@@ -19,14 +15,18 @@ void trace_clean(string in_path, string out_path, int threshold) {
 		before_num++;
 		auto iter = counter.find(id);
 		if (iter != counter.end()) {
-			iter->second++;
-			if (iter->second >= threshold) {
-				output << id << " " << size << endl;
+			iter->second.first++;
+			if (iter->second.first >= threshold) {
+				output << id << " " << iter->second.second << endl;
 				after_num++;
 			}
 		}
 		else {
-			counter[id] = 1;
+			counter[id] = make_pair(1, size);
+			if (threshold == 0) {
+				output << id << " " << size << endl;
+				after_num++;
+			}
 		}
 	}
 	input.close();
