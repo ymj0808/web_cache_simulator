@@ -8,7 +8,7 @@ void trace_clean(string in_path, string out_path, int threshold) {
 	ifstream input(in_path, ios::in);
 	ofstream output(out_path, ios::out);
 	map<long long, pair<int, int>> counter; // id, <count, size>
-	int time, id, size;
+	long long time, id, size;
 	int before_num = 0;
 	int after_num = 0;
 	while (input >> time >> id >> size) {
