@@ -15,6 +15,8 @@
 //#include "../consistent_hash/node.h"
 #include <chrono>
 
+#include "CpuMonitor.cpp"
+
 /*
     this file defines cluster-based cache policy
 */
@@ -33,6 +35,8 @@ protected:
   consistent_hash chash;
   int virtual_node;
 
+  CpuMonitor cpu_mon; // 0118202 Peixuan
+
 public:
   CHCache() : Cache() {}
 
@@ -46,6 +50,11 @@ public:
   virtual void evict(){};
   bool request(SimpleRequest *req);
   void printReqAndFileNum(); // print request number and file number
+
+
+  uint32_t window_size = 1000;
+  uint32_t position = 0;
+
 };
 
 static Factory<CHCache> factoryCH("CH");
@@ -201,7 +210,7 @@ protected:
   dequeue_node *tail = nullptr;
   dequeue_node *pointer = nullptr;
 
-  std::vector<std::map<uint32_t, uint32_t>> frag_arrs; // store arr of each vnode in set, <start, size>
+  std::vector<std::map<uint32_t, uint32_t>> frag_arrs; // store arr of each vnode in set, <start, size> // Peixuan: accumulate size for each vnode
   std::vector<std::map<uint32_t, uint32_t>> frag_arrs_rnode;  // store arr of each rnode
   std::vector<int> cache_index_each_node;
   // std::vector<std::vector<int>> request_array; // cache_index in chash.sorted

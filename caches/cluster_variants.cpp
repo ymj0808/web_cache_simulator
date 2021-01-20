@@ -14,6 +14,9 @@
 #include <unordered_map>
 #include <vector>
 //#include "../consistent_hash/node.h"
+
+#include "CpuMonitor.cpp"
+
 using namespace std;
 
 /*
@@ -79,6 +82,9 @@ void CHCache::init_mapper() {
 
       chash.iter++;
   }*/
+  //CpuMonitor cpu_mon = CpuMonitor(); // Peixuan 01182021
+
+
 }
 
 bool CHCache::request(SimpleRequest *req) {
@@ -88,6 +94,15 @@ bool CHCache::request(SimpleRequest *req) {
   if (!flag) {
     caches_list[cache_index].admit(req);
   }
+
+
+  // 01182021 Peixuan
+  position++;
+  if (position == window_size)
+    position = 0;
+    double percentage = cpu_mon.Get();
+    cout << "CPU usage: " << percentage;
+
   return flag;
 }
 
@@ -691,7 +706,7 @@ void ShufflerM::update() {
           ele.second += size;
       }
       frag_arr_rnode[position + 1] = 0;
-      pointer->copy_arr_rnode(frag_arr_rnode);
+      pointer->copy_arr_rnode(frag_arr_rnode); // Peixuan: Copy rnode requedt to pointer arr
       if (pointer->last_access != UINT32_MAX) {
         pointer->c = pointer->c_value(pointer->last_access);
         pointer->c_vnode = pointer->c_value_vnode(pointer->last_access);
@@ -702,7 +717,7 @@ void ShufflerM::update() {
     pointer = pointer->next;
     ++position;
   }
-  std::cout << "SD_MAX : " << SD_Max << "  ";
+  std::cout << "SD_MAX : " << SD_Max << "  "; // Peixuan Q: current SD_Max is the SD before moving?
   pointer = tail;
   for (auto iter = vnode_index_for_each_real_node[max_i].begin();
        iter != vnode_index_for_each_real_node[max_i].end();
@@ -711,34 +726,35 @@ void ShufflerM::update() {
     while (pointer != nullptr) {
       if (pointer->real_node == min_i) {
         if (pointer->last_access != UINT32_MAX)
-          queue_of_min.push(pointer);
-        while (!queue_of_c_i.empty()) { // all c_i after pointer == min_i
+          queue_of_min.push(pointer); // Peixuan: record min_rnode request
+        while (!queue_of_c_i.empty()) { // all c_i after pointer == min_i, // Peixuan: c_i is request on the current moving node
           dequeue_node *col = queue_of_c_i.front();
+          // Peixuan: vnode c_i sd + rnode min sd and find if hit
           if (col->c_vnode + pointer->c_value(col->last_access) < threshold) {
             SD++;
           }
           queue_of_c_i.pop();
         }
-      } else if (pointer->virtual_node == *iter) {
+      } else if (pointer->virtual_node == *iter) { //Peixuan: iter is the current moving vnode
         if (pointer->last_access != UINT32_MAX)
-          queue_of_c_i.push(pointer);
+          queue_of_c_i.push(pointer); // Peixuan: record c_i_vnode (iter) request
         while (!queue_of_max.empty()) {  // all max after iter == c_i
           dequeue_node *col = queue_of_max.front();
-          if (col->c - pointer->c_value_vnode(col->last_access) < threshold) {
+          if (col->c - pointer->c_value_vnode(col->last_access) < threshold) { // Peixuan: max_sd - ci_sd < thresh see if hit
             SD++;
           }
           queue_of_max.pop();
         }
         while (!queue_of_min.empty()) {  // all min after iter == c_i
           dequeue_node *col = queue_of_min.front();
-          if (col->c + pointer->c_value_vnode(col->last_access) < threshold) {
+          if (col->c + pointer->c_value_vnode(col->last_access) < threshold) { // Peixuan: min_sd + ci_sd < thresh see if hit
             SD++;
           }
           queue_of_min.pop();
         }
       } else if (pointer->real_node == max_i &&
                  pointer->last_access != UINT32_MAX) {
-        queue_of_max.push(pointer);
+        queue_of_max.push(pointer); // Peixuan: record max_rnode request (request on max except the ones on c_i(iter vnode))
       }
       pointer = pointer->prev;
     }
@@ -785,7 +801,7 @@ bool ShufflerM::request(SimpleRequest *req) {
 
   iter_in_last_access =
       last_access_on_each_virtual_node[look_up_res.first].find(
-          req->getId());                               // <ID, last access>
+          req->getId());                               // <ID, last access> // Peixuan: find last access of this file ID on vnode
   // the fragment array (stored in std::set) of this vnode
   auto &frag_arr_vnode = frag_arrs[look_up_res.first]; 
   if (iter_in_last_access !=
@@ -798,7 +814,7 @@ bool ShufflerM::request(SimpleRequest *req) {
     frag_arr_vnode.erase(next);  // fragment merging, see the paper  
     pointer->last_access = iter_in_last_access->second;
     iter_in_last_access->second = position;
-  } else {
+  } else { // Peixuan: new file ID, first access
     for (auto& ele : frag_arr_vnode)
       ele.second += size;
     last_access_on_each_virtual_node[look_up_res.first][req->getId()] = position;
@@ -806,12 +822,13 @@ bool ShufflerM::request(SimpleRequest *req) {
   }
   frag_arr_vnode[position + 1] = 0;  // the position for the first 0
   
-  pointer->copy_arr(frag_arr_vnode, look_up_res, size);
+  pointer->copy_arr(frag_arr_vnode, look_up_res, size); //Peixuan Q: copy frag_arr_vnode to arr?
   //pointer->copy_arr(frag_arr_vnode, frag_arr_rnode,look_up_res);
   pointer->copy_arr_rnode(frag_arrs_rnode[look_up_res.second]); // even though this do nothing, delete this cause bug
   pointer = pointer->next;
   //std::cout << position << ",";
   position++;
+  // Here is regular look up (in the cache server)
   flag = caches_list[look_up_res.second].lookup(req);
   if (!flag) {
     caches_list[look_up_res.second].admit(req);
