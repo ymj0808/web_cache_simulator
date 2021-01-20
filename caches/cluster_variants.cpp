@@ -101,7 +101,7 @@ bool CHCache::request(SimpleRequest *req) {
   if (position == window_size){
     position = 0;
     double percentage = cpu_mon.Get();
-    cout << "CPU usage: " << percentage;
+    cout << "CPU usage: " << percentage << std::endl;
   }
 
   return flag;

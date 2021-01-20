@@ -52,7 +52,7 @@ public:
   void printReqAndFileNum(); // print request number and file number
 
 
-  uint32_t window_size = 1000;
+  uint32_t window_size = 1000000;
   uint32_t position = 0;
 
 };
