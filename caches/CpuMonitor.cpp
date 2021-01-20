@@ -1,5 +1,8 @@
 #include <iostream>
 #include <fstream>
+
+#include <fcntl.h>    /* For O_RDWR */
+#include <unistd.h>   /* For open(), creat() */
 //#include io.h
 
 class CpuMonitor {
