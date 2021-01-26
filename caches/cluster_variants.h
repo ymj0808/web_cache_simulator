@@ -236,6 +236,8 @@ protected:
 
   std::unordered_map<uint64_t, uint32_t>::iterator iter_in_last_access;
 
+  CpuMonitor cpu_mon; // 0118202 Peixuan
+
 public:
   ShufflerM() : Cache() {}
 

@@ -840,6 +840,9 @@ bool ShufflerM::request(SimpleRequest *req) {
 
   if (position == window_size) {
     update();
+    // 01182021 Peixuan
+    double percentage = cpu_mon.Get();
+    cout << "CPU usage: " << percentage << std::endl;
   }
   return flag;
 }
