@@ -95,6 +95,9 @@ int main(int argc, char *argv[]) {
         } else {
           webcache->admit(req);
         }
+        if (reqs % 100 == 0) {
+            cout << "total:" << double(hits) / reqs << endl;
+        }
       }
     }  
   } else { // cluster variants
@@ -109,6 +112,9 @@ int main(int argc, char *argv[]) {
           hits++;
           hits_size += size;
         }
+        if (reqs % 100 == 0) {
+            cout << "total:" << double(hits) / reqs << endl;
+        }
         // if (reqs % 100000 == 0) {
         //   webcache->print_hash_space();
         // }
@@ -122,6 +128,9 @@ int main(int argc, char *argv[]) {
         if (webcache->request(req)) {
           hits++;
           hits_size += size;
+        }
+        if (reqs % 100 == 0) {
+            cout << "total:" << double(hits) / reqs << endl;
         }
         // if (reqs % 100000 == 0) {
         //   webcache->print_hash_space();
