@@ -24,6 +24,7 @@ using namespace std;
 */
 
 bool CHCache::lookup(SimpleRequest *req) {
+    cout << "lookup" << endl;
   auto cache_index = chash.look_up(std::to_string(req->getId())).second;
   std::cout << "cache" << cache_index << " " << req->getId() << " " << req->getSize() << endl;
   return caches_list[cache_index].lookup(req);  
