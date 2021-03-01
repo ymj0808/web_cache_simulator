@@ -79,6 +79,9 @@ int main(int argc, char *argv[]) {
         } else {
           webcache->admit(req);
         }
+        if (reqs % 100 == 0) {
+            cout << "total:" << double(hits) / reqs << endl;
+        }
       }
     } else {
       while (infile >> id >> size) {

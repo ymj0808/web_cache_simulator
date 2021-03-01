@@ -36,8 +36,7 @@ public:
   virtual void evict(SimpleRequest *req);
   virtual void evict();
   virtual SimpleRequest *evict_return();
-  virtual int
-  requestNum(); // return request number and unique file number   -- ymj
+  virtual int requestNum(); // return request number and unique file number   -- ymj
   virtual int uniqueFileNum();
 };
 
