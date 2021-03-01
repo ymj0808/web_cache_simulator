@@ -518,7 +518,7 @@ bool Shuffler::request(SimpleRequest *req) {
 
 bool ShufflerM::lookup(SimpleRequest *req) {
   auto cache_index = chash.look_up(std::to_string(req->getId())).second;
-  cout << "cache" << cache_index << " " << req->getId() << " " << req->getSize() << endl;
+  std::cout << "cache" << cache_index << " " << req->getId() << " " << req->getSize() << endl;
   return caches_list[cache_index].lookup(req);
 }
 
