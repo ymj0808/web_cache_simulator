@@ -98,12 +98,12 @@ bool CHCache::request(SimpleRequest *req) {
 
 
   // 01182021 Peixuan
-  position++;
+ /* position++;
   if (position == window_size){
     position = 0;
     double percentage = cpu_mon.Get();
-    //cout << "CPU usage: " << percentage << std::endl;
-  }
+    cout << "CPU usage: " << percentage << std::endl;
+  }*/
 
   return flag;
 }
