@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
           webcache->admit(req);
         }
         if (reqs % 100 == 0) {
-            cout << "total:" << double(hits) / reqs << endl;
+            //cout << "total:" << double(hits) / reqs << endl;
         }
       }
     } else {
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
           webcache->admit(req);
         }
         if (reqs % 100 == 0) {
-            cout << "total:" << double(hits) / reqs << endl;
+            //cout << "total:" << double(hits) / reqs << endl;
         }
       }
     }  
@@ -113,7 +113,7 @@ int main(int argc, char *argv[]) {
           hits_size += size;
         }
         if (reqs % 100 == 0) {
-            cout << "total:" << double(hits) / reqs << endl;
+            //cout << "total:" << double(hits) / reqs << endl;
         }
         // if (reqs % 100000 == 0) {
         //   webcache->print_hash_space();
@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
           hits_size += size;
         }
         if (reqs % 100 == 0) {
-            cout << "total:" << double(hits) / reqs << endl;
+            //cout << "total:" << double(hits) / reqs << endl;
         }
         // if (reqs % 100000 == 0) {
         //   webcache->print_hash_space();

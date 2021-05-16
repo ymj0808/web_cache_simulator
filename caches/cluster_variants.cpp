@@ -90,7 +90,7 @@ void CHCache::init_mapper() {
 bool CHCache::request(SimpleRequest *req) {
   auto cache_index = chash.look_up(std::to_string(req->getId())).second;
   // auto cache_index = mapper.find(obj)->second; // redirect to small cache
-  std::cout << "cache" << cache_index << "-" << req->getId() << "-" << req->getSize() << endl;
+  //std::cout << "cache" << cache_index << "-" << req->getId() << "-" << req->getSize() << endl;
   bool flag = caches_list[cache_index].lookup(req);
   if (!flag) {
     caches_list[cache_index].admit(req);
