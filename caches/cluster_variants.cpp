@@ -90,7 +90,7 @@ void CHCache::init_mapper() {
 bool CHCache::request(SimpleRequest *req) {
   auto cache_index = chash.look_up(std::to_string(req->getId())).second;
   // auto cache_index = mapper.find(obj)->second; // redirect to small cache
-  std::cout << "cache" << cache_index << " " << req->getId() << " " << req->getSize() << endl;
+  std::cout << "cache" << cache_index << "-" << req->getId() << "-" << req->getSize() << endl;
   bool flag = caches_list[cache_index].lookup(req);
   if (!flag) {
     caches_list[cache_index].admit(req);
@@ -800,39 +800,45 @@ bool ShufflerM::request(SimpleRequest *req) {
       std::to_string(req->getId())); // <virtual node index, real node index>
   request_count[look_up_res.second]++;
 
-  std::cout << "cache" << look_up_res.second << " " << req->getId() << " " << req->getSize() << endl;
+  //std::cout << "cache" << look_up_res.second << "-" << req->getId() << "-" << req->getSize() << endl;
 
-  auto size = req->getSize();
 
-  iter_in_last_access =
-      last_access_on_each_virtual_node[look_up_res.first].find(
-          req->getId());                               // <ID, last access> // Peixuan: find last access of this file ID on vnode
-  // the fragment array (stored in std::set) of this vnode
-  auto &frag_arr_vnode = frag_arrs[look_up_res.first]; 
-  if (iter_in_last_access !=
-      last_access_on_each_virtual_node[look_up_res.first].end()) {
-    // accessed before
-    auto start = frag_arr_vnode.find(iter_in_last_access->second);
-    auto next = ++start;  // the fragment need to be erased
-    while (++start != frag_arr_vnode.end()) // next never be the end()
-      start->second += size;  // those first time see this content
-    frag_arr_vnode.erase(next);  // fragment merging, see the paper  
-    pointer->last_access = iter_in_last_access->second;
-    iter_in_last_access->second = position;
-  } else { // Peixuan: new file ID, first access
-    for (auto& ele : frag_arr_vnode)
-      ele.second += size;
-    last_access_on_each_virtual_node[look_up_res.first][req->getId()] = position;
-    pointer->last_access = UINT32_MAX;
+
+  if (count % 10 == 0) {
+      auto size = req->getSize();
+      iter_in_last_access =
+          last_access_on_each_virtual_node[look_up_res.first].find(
+              req->getId());                               // <ID, last access> // Peixuan: find last access of this file ID on vnode
+      // the fragment array (stored in std::set) of this vnode
+      auto& frag_arr_vnode = frag_arrs[look_up_res.first];
+      if (iter_in_last_access !=
+          last_access_on_each_virtual_node[look_up_res.first].end()) {
+          // accessed before
+          auto start = frag_arr_vnode.find(iter_in_last_access->second);
+          auto next = ++start;  // the fragment need to be erased
+          while (++start != frag_arr_vnode.end()) // next never be the end()
+              start->second += size;  // those first time see this content
+          frag_arr_vnode.erase(next);  // fragment merging, see the paper  
+          pointer->last_access = iter_in_last_access->second;
+          iter_in_last_access->second = position;
+      }
+      else { // Peixuan: new file ID, first access
+          for (auto& ele : frag_arr_vnode)
+              ele.second += size;
+          last_access_on_each_virtual_node[look_up_res.first][req->getId()] = position;
+          pointer->last_access = UINT32_MAX;
+      }
+      frag_arr_vnode[position + 1] = 0;  // the position for the first 0
+
+      pointer->copy_arr(frag_arr_vnode, look_up_res, size); //Peixuan Q: copy frag_arr_vnode to arr?
+      //pointer->copy_arr(frag_arr_vnode, frag_arr_rnode,look_up_res);
+      pointer->copy_arr_rnode(frag_arrs_rnode[look_up_res.second]); // even though this do nothing, delete this cause bug
+      pointer = pointer->next;
+      //std::cout << position << ",";
+      position++;
   }
-  frag_arr_vnode[position + 1] = 0;  // the position for the first 0
-  
-  pointer->copy_arr(frag_arr_vnode, look_up_res, size); //Peixuan Q: copy frag_arr_vnode to arr?
-  //pointer->copy_arr(frag_arr_vnode, frag_arr_rnode,look_up_res);
-  pointer->copy_arr_rnode(frag_arrs_rnode[look_up_res.second]); // even though this do nothing, delete this cause bug
-  pointer = pointer->next;
-  //std::cout << position << ",";
-  position++;
+  count++;
+
   // Here is regular look up (in the cache server)
   flag = caches_list[look_up_res.second].lookup(req);
   if (!flag) {
